@@ -1,0 +1,47 @@
+<ion-app>
+  <ion-menu side="start" menuId="m1">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>
+          Menu 
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <ion-list>
+          <ion-menu-toggle>
+          <ion-item lines="none" routerLink="/search">
+            <ion-icon name="card" slot="start"></ion-icon>
+            <ion-label>Scan Patient Card</ion-label>
+          </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+            <ion-item lines="none" routerLink="/qr-scan">
+              <ion-icon name="qr-scanner" slot="start"></ion-icon>
+              <ion-label>Scan Patient QR Code</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+          <ion-item lines="none" routerLink="/create">
+            <ion-icon name="person-add" slot="start"></ion-icon>
+            <ion-label>Add New Patient</ion-label>
+          </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+          <ion-item lines="none" routerLink="/list">
+            <ion-icon name="list" slot="start"></ion-icon>
+            <ion-label>Full List</ion-label>
+          </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+          <ion-item lines="none" (click)="onLogout()">
+            <ion-icon name="exit" slot="start"></ion-icon>
+            <ion-label>Logout</ion-label>
+          </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet main></ion-router-outlet>
+</ion-app>
