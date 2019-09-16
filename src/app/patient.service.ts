@@ -33,4 +33,8 @@ export class PatientService {
   }
 
   constructor() { }
+
+  getPatient(id: string) {
+    return {...this._patients.find(p => p.id === id)};
+  }
 }
