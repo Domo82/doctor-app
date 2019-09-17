@@ -1,12 +1,32 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="list"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ patient.name }} Details</ion-title>
+    <ion-title>{{ patient.name }}'s Details</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-img [src]="patient.imageUrl"></ion-img>
+    <ion-card-content>
+      <ion-card-title class="ion-text-center">
+        {{ patient.name }}
+      </ion-card-title>
+      <ion-label>
+        <h2>PPS No: {{ patient.pps }}</h2>
+        <h2>ID No: {{ patient.id }}</h2>
+      </ion-label>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-button
+  class="ion-margin"
+  color="light"
+  [routerLink]="['/', 'edit', patient.id]"
+  >Edit
+  </ion-button>
 
 </ion-content>

@@ -13,6 +13,10 @@ const routes: Routes = [
   { path: 'qr-scan', loadChildren: './qr-scan/qr-scan.module#QrScanPageModule', canLoad: [AuthGuard] },
   { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule' },
   { path: 'list', loadChildren: './list/list.module#ListPageModule', canLoad: [AuthGuard] },
+  { path: 'edit', loadChildren: './edit/edit.module#EditPageModule', canLoad: [AuthGuard] },
+  { path: 'edit/:id', loadChildren: './edit/edit.module#EditPageModule', canLoad: [AuthGuard] },
+
+
 ];
 
 @NgModule({

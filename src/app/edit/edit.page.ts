@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
-import { PatientService } from '../patient.service';
 
 import { Patient } from '../patients.model';
+import { PatientService } from '../patient.service';
+import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
+
 
 @Component({
-  selector: 'app-details',
-  templateUrl: './details.page.html',
-  styleUrls: ['./details.page.scss'],
+  selector: 'app-edit',
+  templateUrl: './edit.page.html',
+  styleUrls: ['./edit.page.scss'],
 })
-export class DetailsPage implements OnInit {
+export class EditPage implements OnInit {
   patient: Patient;
 
   constructor(
+    private patientSrvc: PatientService,
     private route: ActivatedRoute,
-    private navCtrl: NavController,
-    private patientSrvc: PatientService) { }
+    private navCtrl: NavController) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
@@ -27,4 +28,5 @@ export class DetailsPage implements OnInit {
       this.patient = this.patientSrvc.getPatient(paramMap.get('id'));
     });
   }
+
 }
