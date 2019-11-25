@@ -9,9 +9,11 @@
 
 <ion-content class="ion-padding">
   <ion-card>
-    <ion-img [src]="patient.imageUrl"></ion-img>
+    <ion-avatar>
+      <ion-img [src]="patient.imageUrl"></ion-img>
+    </ion-avatar>
     <ion-card-content>
-      <ion-card-title class="ion-text-center">
+      <ion-card-title >
         {{ patient.name }}
       </ion-card-title>
       <ion-label>
