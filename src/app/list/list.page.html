@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-menu-button menu="m1"></ion-menu-button>
+        <!-- <ion-menu-button menu="m1"></ion-menu-button> -->
         <ion-back-button defaultHref="home"></ion-back-button>
       </ion-buttons>
     <ion-title>Patient List</ion-title>
@@ -19,8 +19,8 @@
               <ion-img [src]="patient.imageUrl"></ion-img>
             </ion-avatar>
               <ion-label>
-                <h2>{{ patient.name }}</h2>
-                <p>{{ patient.pps }}</p>
+                <h2>{{ patient.forename }} {{ patient.surname }}</h2>
+                <p>Patient ID: {{ patient.id }}</p>
               </ion-label>
           </ion-item>
         </ion-list>

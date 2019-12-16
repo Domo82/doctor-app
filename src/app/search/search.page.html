@@ -9,13 +9,21 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-row>
-    <ion-col size="8" size-m="6" offset="1">
-      <ion-button
-      class="ion-margin"
-      color="light"
-      >
-      Click button to scan card</ion-button>
-    </ion-col>
-  </ion-row>
+  <form action="">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-md="6" offset-sm="3">
+          <ion-item>
+            <ion-label position="floating">RFID</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <ion-button
+          class="ion-margin"
+          color="light"
+          >
+          Click button to scan card</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>

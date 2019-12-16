@@ -1,31 +1,65 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Authenticate</ion-title>
+    <ion-title>{{ isLogin? 'Login' : 'Signup'}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-grid>
-    <ion-row>
-      <ion-col size-md="6" offset-md="3">
-         <ion-list>
-          <ion-item>
-            <ion-label position="floating">E-mail</ion-label>
-            <ion-input type="email"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating">Password</ion-label>
-            <ion-input type="passwords"></ion-input>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-md="6" offset-md="3">
-        <ion-button color="light" fill="outline" expand="block" >Switch to Login</ion-button>
-        <ion-button color="light" (click)="onLogin()" expand="block">Login</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- add reference value to the form, here form is stored in #f-->
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-md="6" offset-sm="3">
+          <ion-list>
+            <ion-item>
+              <ion-label position="floating">E-mail</ion-label>
+              <ion-input
+              type="email"
+              ngModel
+              name="email"
+              required
+              email
+              #emailControl="ngModel"
+              ></ion-input>
+              <p *ngIf="!emailControl.valid && emailControl.touched"
+              >This should be a valid email address.</p>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input
+              type="password"
+              ngModel
+              name="password"
+              required
+              minlength="6"
+              #passwordControl="ngModel"
+              ></ion-input>
+              <p *ngIf="!passwordControl.valid && passwordControl.touched"
+              >Password should have 6 or more characters.</p>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-md="6" offset-md="3">
+          <ion-button
+          type="button"
+          color="light"
+          fill="outline"
+          expand="block"
+          (click)="onswitchAuthMode()"
+          >Switch to {{ isLogin? 'Signup' : 'Login'}}</ion-button>
+          
+          <ion-button
+          type="submit"
+          color="light"
+          (click)="onLogin()"
+          expand="block"
+          [disabled]="!f.valid"
+          >Login</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
   
 </ion-content>
