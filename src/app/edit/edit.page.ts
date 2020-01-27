@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NavController, LoadingController } from '@ionic/angular';
 import { FormGroup , FormControl, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -21,7 +21,9 @@ export class EditPage implements OnInit, OnDestroy {
   constructor(
     private patientSrvc: PatientService,
     private route: ActivatedRoute,
-    private navCtrl: NavController) { }
+    private navCtrl: NavController,
+    private router: Router,
+    private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
@@ -29,7 +31,9 @@ export class EditPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/edit');
         return;
       }
-      this.patientSubscription =  this.patientSrvc.getPatient(paramMap.get('id')).subscribe(patient => {
+      this.patientSubscription =  this.patientSrvc
+      .getPatient(paramMap.get('id'))
+      .subscribe(patient => {
         this.patient = patient;
         this.form = new FormGroup({
           forename: new FormControl(this.patient.forename, {
@@ -74,14 +78,37 @@ export class EditPage implements OnInit, OnDestroy {
           })
         });
       });
-    });     
+    });
   }
 
   onUpdateDetails() {
     if(!this.form.valid) {
       return;
     }
-    console.log(this.form);
+    this.loadingCtrl
+    .create({
+      message: 'Updating details...'
+    })
+    .then(loadingEl => {
+      loadingEl.present();
+      this.patientSrvc
+      .updatePatient(
+        this.patient.id,
+        this.form.value.forename,
+        this.form.value.surname,
+        this.form.value.address,
+        this.form.value.medicalHistory,
+        this.form.value.drugHistory,
+        this.form.value.allergies,
+        this.form.value.emergencyContact1,
+        this.form.value.emergencyContact2,
+        this.form.value.emergencyContact3
+      ).subscribe(() => {
+        loadingEl.dismiss();
+        this.form.reset();
+        this.router.navigate(['/list']);
+      });
+    });
   }
 
   ngOnDestroy() {

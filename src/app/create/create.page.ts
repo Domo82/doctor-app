@@ -35,7 +35,7 @@ export class CreatePage implements OnInit {
       pps: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.max(12)]
-      }), 
+      }),
       medicalHistory: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.maxLength(2500)]
@@ -66,7 +66,7 @@ export class CreatePage implements OnInit {
       }),
     });
   }
-  
+
   onCreatePatient() {
     if(!this.form.valid) {
       return;

@@ -74,10 +74,10 @@ export class PatientService {
 
   getPatient(id: string) {
     return this.patients.pipe(
-      take(1), map(patients => {
-      return {...patients.find(p => p.id === id)};
+      take(1),
+      map(patients => {
+        return {...patients.find(p => p.id === id)};
     }));
-    
   }
 
   addPatient(
@@ -105,15 +105,58 @@ export class PatientService {
         allergies,
         emergencyContact1,
         emergencyContact2,
-        emergencyContact3, 
+        emergencyContact3,
         '/assets/images/newuser.png',
         // fetch creator from auth service
         this.authService.creatorId,
         this.authService.creatorName
         );
-        return this.patients.pipe(take(1), delay(1000), tap(patients => {
+        return this.patients.pipe(
+          take(1),
+          delay(1000),
+          tap(patients => {
             this._patients.next(patients.concat(newPatient));
         })
       );
-    };      
+    };
+    updatePatient(
+      id: string,
+      forename: string,
+      surname: string,
+      address: string,
+      medicalHistory: string,
+      drugHistory: string,
+      allergies: string,
+      emergencyContact1: string,
+      emergencyContact2: string,
+      emergencyContact3: string,
+      ){
+      return this.patients.pipe(
+        take(1),
+        delay(1500),
+        tap(patients => {
+        const updatedPatientIndex = patients.findIndex(pat => pat.id === id);
+        const updatedPatients = [...patients];
+        const oldPatient = updatedPatients[updatedPatientIndex];
+        updatedPatients[updatedPatientIndex] = new Patient(
+          oldPatient.id,
+          forename,
+          surname,
+          oldPatient.dateOfBirth,
+          oldPatient.pps,
+          address,
+          medicalHistory,
+          drugHistory,
+          allergies,
+          emergencyContact1,
+          emergencyContact2,
+          emergencyContact3,
+          oldPatient.imageUrl,
+          oldPatient.creatorId,
+          oldPatient.creatorName
+          );
+          this._patients.next(updatedPatients);
+        })
+      );
+    }
 }
