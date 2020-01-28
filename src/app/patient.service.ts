@@ -4,6 +4,7 @@ import { take, map, tap, delay } from 'rxjs/operators';
 
 import { Patient } from './patients.model';
 import { AuthService } from './auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -11,7 +12,6 @@ import { AuthService } from './auth/auth.service';
   providedIn: 'root'
 })
 export class PatientService {
-  // tslint:disable-next-line: variable-name
   private _patients = new BehaviorSubject<Patient[]>([
     new Patient(
       '112233',
@@ -70,14 +70,15 @@ export class PatientService {
     return this._patients.asObservable();
   }
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private http: HttpClient) { }
 
   getPatient(id: string) {
     return this.patients.pipe(
       take(1),
       map(patients => {
-        return {...patients.find(p => p.id === id)};
-    }));
+        return { ...patients.find(p => p.id === id)};
+      })
+    );
   }
 
   addPatient(
@@ -111,14 +112,20 @@ export class PatientService {
         this.authService.creatorId,
         this.authService.creatorName
         );
-        return this.patients.pipe(
-          take(1),
-          delay(1000),
-          tap(patients => {
-            this._patients.next(patients.concat(newPatient));
-        })
-      );
+        return this.http.post('https://medi-comm-d1778.firebaseio.com/patients.json',
+          { ...newPatient, id: null}).pipe(tap(resData => {
+            console.log(resData);
+          })
+        );
+      //   return this.patients.pipe(
+      //     take(1),
+      //     delay(1000),
+      //     tap(patients => {
+      //       this._patients.next(patients.concat(newPatient));
+      //   })
+      // );
     };
+
     updatePatient(
       id: string,
       forename: string,

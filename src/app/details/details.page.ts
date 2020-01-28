@@ -20,7 +20,8 @@ export class DetailsPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private patientSrvc: PatientService) { }
+    private patientSrvc: PatientService,
+    ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
@@ -28,7 +29,9 @@ export class DetailsPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/create');
         return;
       }
-      this.patientSubscription = this.patientSrvc.getPatient(paramMap.get('id')).subscribe(patient => {
+      this.patientSubscription = this.patientSrvc
+      .getPatient(paramMap.get('id'))
+      .subscribe(patient => {
         this.patient = patient;
       });
     });

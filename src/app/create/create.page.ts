@@ -71,11 +71,14 @@ export class CreatePage implements OnInit {
     if(!this.form.valid) {
       return;
     }
-    this.loadingCtrl.create({
+    this.loadingCtrl
+    .create({
       message: 'Creating New Patient...'
-    }).then(loadingEl => {
+    })
+    .then(loadingEl => {
       loadingEl.present();
-      this.patientService.addPatient(
+      this.patientService
+      .addPatient(
         this.form.value.forename,
         this.form.value.surname,
         new Date(this.form.value.dateOfBirth),
@@ -88,11 +91,12 @@ export class CreatePage implements OnInit {
         this.form.value.emergencyContact2,
         this.form.value.emergencyContact3,
         this.form.value.imageUrl
-      ).subscribe(() => {
+      )
+      .subscribe(() => {
         loadingEl.dismiss();
         this.form.reset();
         this.router.navigate(['/list']);
-      })
       });
-    }
+    });
+  }
 }
