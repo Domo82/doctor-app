@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { take, map, tap, delay } from 'rxjs/operators';
+import { take, map, tap, delay, switchMap } from 'rxjs/operators';
 
 import { Patient } from './patients.model';
 import { AuthService } from './auth/auth.service';
@@ -93,7 +93,9 @@ export class PatientService {
     emergencyContact1: string,
     emergencyContact2: string,
     emergencyContact3: string,
-    imageUrl: string ) {
+    imageUrl: string 
+    ) {
+      let generatedId: string;
       const newPatient = new Patient(
         Math.random().toString(),
         forename,
@@ -112,10 +114,20 @@ export class PatientService {
         this.authService.creatorId,
         this.authService.creatorName
         );
-        return this.http.post('https://medi-comm-d1778.firebaseio.com/patients.json',
-          { ...newPatient, id: null}).pipe(tap(resData => {
-            console.log(resData);
-          })
+        return this.http
+        .post<{name : string}>('https://medi-comm-d1778.firebaseio.com/patients.json',{
+           ...newPatient,
+           id: null})
+          .pipe(
+            switchMap(resData => {
+              generatedId = resData.name;
+              return this.patients;
+            }),
+            take(1),
+            tap(patients => {
+              newPatient.id = generatedId;
+              this._patients.next(patients.concat(newPatient));
+            })
         );
       //   return this.patients.pipe(
       //     take(1),
@@ -124,7 +136,7 @@ export class PatientService {
       //       this._patients.next(patients.concat(newPatient));
       //   })
       // );
-    };
+    }
 
     updatePatient(
       id: string,
