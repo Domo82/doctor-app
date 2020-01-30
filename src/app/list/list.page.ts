@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class ListPage implements OnInit, OnDestroy {
   loadedPatients: Patient[];
   private patientsSubscription: Subscription;
+  isLoading = false;
 
   constructor(private patientSrvc: PatientService, private router: Router) { }
 
@@ -22,6 +23,14 @@ export class ListPage implements OnInit, OnDestroy {
       this.loadedPatients = patientList;
     });
   }
+
+  ionViewWillEnter() {
+    this.isLoading = true;
+    this.patientSrvc.fetchPlaces().subscribe(() => {
+      this.isLoading = false;
+    });
+  }
+
   ngOnDestroy() {
     if (this.patientsSubscription) {
       this.patientsSubscription.unsubscribe();
