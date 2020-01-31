@@ -62,8 +62,8 @@ export class PatientService {
           );
         }
       }
-      //return patients;
-      return[];
+      return patients;
+      //return[];
     }),
     tap(patients => {
       this._patients.next(patients);
@@ -149,30 +149,35 @@ export class PatientService {
       emergencyContact2: string,
       emergencyContact3: string,
       ){
-      return this.patients.pipe(
-        take(1),
-        delay(1500),
-        tap(patients => {
-        const updatedPatientIndex = patients.findIndex(pat => pat.id === id);
-        const updatedPatients = [...patients];
-        const oldPatient = updatedPatients[updatedPatientIndex];
-        updatedPatients[updatedPatientIndex] = new Patient(
-          oldPatient.id,
-          forename,
-          surname,
-          oldPatient.dateOfBirth,
-          oldPatient.pps,
-          address,
-          medicalHistory,
-          drugHistory,
-          allergies,
-          emergencyContact1,
-          emergencyContact2,
-          emergencyContact3,
-          oldPatient.imageUrl,
-          oldPatient.creatorId,
-          oldPatient.creatorName
+        let updatedPatients: Patient[];
+        return this.patients.pipe(
+          take(1),
+          switchMap(patients => {
+          const updatedPatientIndex = patients.findIndex(pat => pat.id === id);
+          const updatedPatients = [...patients];
+          const oldPatient = updatedPatients[updatedPatientIndex];
+          updatedPatients[updatedPatientIndex] = new Patient(
+            oldPatient.id,
+            forename,
+            surname,
+            oldPatient.dateOfBirth,
+            oldPatient.pps,
+            address,
+            medicalHistory,
+            drugHistory,
+            allergies,
+            emergencyContact1,
+            emergencyContact2,
+            emergencyContact3,
+            oldPatient.imageUrl,
+            oldPatient.creatorId,
+            oldPatient.creatorName
+            );
+          return this.http.put(`https://medi-comm-d1778.firebaseio.com/patients/${id}.json`,
+          {...updatedPatients[updatedPatientIndex], id:null }
           );
+        }),
+        tap(() => {
           this._patients.next(updatedPatients);
         })
       );
