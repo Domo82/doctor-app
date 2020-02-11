@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController, LoadingController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController } from '@ionic/angular';
 import { FormGroup , FormControl, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -15,7 +15,9 @@ import { PatientService } from '../patient.service';
 })
 export class EditPage implements OnInit, OnDestroy {
   patient: Patient;
-  form: FormGroup
+  patientId: string;
+  form: FormGroup;
+  isLoading = false;
   private patientSubscription: Subscription;
 
   constructor(
@@ -23,7 +25,8 @@ export class EditPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private router: Router,
-    private loadingCtrl: LoadingController) { }
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
@@ -31,9 +34,11 @@ export class EditPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/edit');
         return;
       }
+      this.isLoading = true;
       this.patientSubscription =  this.patientSrvc
       .getPatient(paramMap.get('id'))
-      .subscribe(patient => {
+      .subscribe(
+        patient => {
         this.patient = patient;
         this.form = new FormGroup({
           forename: new FormControl(this.patient.forename, {
@@ -77,9 +82,35 @@ export class EditPage implements OnInit, OnDestroy {
             validators: [Validators.maxLength(10)]
           })
         });
+        this.isLoading = false;
+      }, error => {
+        this.alertCtrl
+        .create({
+          header: 'An error occurred!',
+          message: 'Patient could not be fetched. Please try again later.',
+          buttons: [
+            {
+            text: 'Okay',
+            handler: () => {
+            this.router.navigate(['/list']);
+          }
+        }
+      ]
+      })
+      .then(alertEl => {
+        alertEl.present();
       });
-    });
-  }
+      }
+    );
+  });
+}
+  // ionViewWillEnter() {
+  //   this.isLoading = true;
+  //   this.patientSrvc.fetchPatient().subscribe(() => {
+  //     this.isLoading = false;
+  //   });
+  // }
+
 
   onUpdateDetails() {
     if(!this.form.valid) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { take, map, tap, delay, switchMap } from 'rxjs/operators';
 
 import { Patient } from './patients.model';
@@ -7,7 +7,7 @@ import { AuthService } from './auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 
 interface PatientData{
-  address:  string;
+  address: string;
   allergies: string;
   creatorId: string;
   creatorName: string;
@@ -36,13 +36,17 @@ export class PatientService {
   constructor(private authService: AuthService, private http: HttpClient) { }
 
   // fetch our existing places with http GET request
-  fetchPlaces() {
-    return this.http.get<{ [key : string]: PatientData }>('https://medi-comm-d1778.firebaseio.com/patients.json')
-    .pipe(map(resData => {
+  fetchPatient() {
+    return this.http
+    .get<{[key:string]: PatientData }>('https://medi-comm-d1778.firebaseio.com/patients.json'
+    )
+    .pipe(
+      map(resData => {
       const patients = [];
       for (const key in resData) {
         if (resData.hasOwnProperty(key)) {
-          patients.push(new Patient(
+          patients.push(
+            new Patient(
             key,
             resData[key].forename,
             resData[key].surname,
@@ -68,18 +72,44 @@ export class PatientService {
     tap(patients => {
       this._patients.next(patients);
     })
-    );
-  }
+  );
+}
+
+  // getPatient(id: string) {
+  //   return this.patients.pipe(
+  //     take(1),
+  //     map(patients => {
+  //       return { ...patients.find(p => p.id === id)};
+  //     })
+  //   );
+  // }
 
   getPatient(id: string) {
-    return this.patients.pipe(
-      take(1),
-      map(patients => {
-        return { ...patients.find(p => p.id === id)};
+    return this.http
+    .get<PatientData>(`https://medi-comm-d1778.firebaseio.com/patients/${id}.json`
+    )
+    .pipe(
+      map(patientData => {
+        return new Patient(
+          id,
+          patientData.forename,
+          patientData.surname,
+          new Date(patientData.dateOfBirth),
+          patientData.pps,
+          patientData.address,
+          patientData.medicalHistory,
+          patientData.drugHistory,
+          patientData.allergies,
+          patientData.emergencyContact1,
+          patientData.emergencyContact2,
+          patientData.emergencyContact3,
+          patientData.imageUrl,
+          patientData.creatorName,
+          patientData.creatorId
+           )
       })
     );
   }
-
   addPatient(
     forename: string,
     surname: string,
@@ -153,6 +183,20 @@ export class PatientService {
         return this.patients.pipe(
           take(1),
           switchMap(patients => {
+            if (!patients || patients.length <= 0) {
+              return this.fetchPatient();
+            } else {
+              return of(patients);
+            }
+        }),
+        switchMap(patients => {
+          if (!patients || patients.length <=0) {
+            return this.fetchPatient();
+          } else {
+            return of(patients);
+          }
+        }),
+        switchMap(patients => {
           const updatedPatientIndex = patients.findIndex(pat => pat.id === id);
           const updatedPatients = [...patients];
           const oldPatient = updatedPatients[updatedPatientIndex];

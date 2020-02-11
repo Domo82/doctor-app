@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NavController, LoadingController, AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 import { PatientService } from '../patient.service';
-
 import { Patient } from '../patients.model';
 
 
@@ -15,12 +14,17 @@ import { Patient } from '../patients.model';
 })
 export class DetailsPage implements OnInit, OnDestroy {
   patient: Patient;
+  isLoading = false;
+  patientId: string;
   private patientSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private patientSrvc: PatientService,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController,
+    private router: Router
     ) { }
 
   ngOnInit() {
@@ -29,13 +33,29 @@ export class DetailsPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/create');
         return;
       }
-      this.patientSubscription = this.patientSrvc
-      .getPatient(paramMap.get('id'))
-      .subscribe(patient => {
+      this.isLoading = true;
+      //this.patientId = paramMap.get('id');
+      this.patientSubscription = this.patientSrvc.getPatient(paramMap.get('id')).subscribe(patient => {
         this.patient = patient;
-      });
-    });
-  }
+        this.isLoading = false;
+      }, error => {
+        this.alertCtrl.create({
+          header: 'An error occures',
+          message: 'Could not load patient.',
+          buttons: [
+            {
+              text: 'Okay',
+              handler:()=> {
+              this.router.navigate(['/home']);
+            }
+          }
+        ]
+        })
+        .then(alertEl => alertEl.present());
+      }
+    );
+  });
+}
   ngOnDestroy() {
     if (this.patientSubscription) {
       this.patientSubscription.unsubscribe();

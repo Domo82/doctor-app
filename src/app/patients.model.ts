@@ -1,5 +1,3 @@
-import { logging } from 'protractor';
-
 export class Patient {
     constructor(
         public id: string,

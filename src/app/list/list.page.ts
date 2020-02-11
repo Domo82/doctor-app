@@ -26,7 +26,7 @@ export class ListPage implements OnInit, OnDestroy {
 
   ionViewWillEnter() {
     this.isLoading = true;
-    this.patientSrvc.fetchPlaces().subscribe(() => {
+    this.patientSrvc.fetchPatient().subscribe(() => {
       this.isLoading = false;
     });
   }
