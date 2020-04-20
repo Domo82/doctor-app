@@ -6,7 +6,7 @@ const routes: Routes = [
   { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule' },
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule), canLoad: [AuthGuard]},
-  { path: 'patient', loadChildren: './patient/patient.module#PatientPageModule', canLoad: [AuthGuard] },
+  { path: 'patient/:id', loadChildren: './patient/patient.module#PatientPageModule', canLoad: [AuthGuard] },
   { path: 'details/:id', loadChildren: './details/details.module#DetailsPageModule', canLoad: [AuthGuard] },
   { path: 'create', loadChildren: './create/create.module#CreatePageModule', canLoad: [AuthGuard] },
   { path: 'search', loadChildren: './search/search.module#SearchPageModule', canLoad: [AuthGuard] },

@@ -3,6 +3,9 @@ import { Platform, NavController } from '@ionic/angular';
 import { AuthService } from './auth/auth.service';
 import { Plugins, Capacitor } from '@capacitor/core';
 import { Router } from '@angular/router';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+
+
 // import { Route } from '@angular/router';
 
 @Component({
@@ -11,10 +14,12 @@ import { Router } from '@angular/router';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+
   constructor(
     private platform: Platform,
     private authSrvc: AuthService,
-    private router: Router
+    private router: Router,
+    private firestore: AngularFirestore
 
   ) {
     this.initializeApp();

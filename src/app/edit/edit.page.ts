@@ -53,10 +53,10 @@ export class EditPage implements OnInit, OnDestroy {
             updateOn: 'blur',
             validators: [Validators.required, Validators.maxLength(250)]
           }),
-          dateOfBirth: new FormControl(null, {
-            updateOn: 'blur',
-            validators: [Validators.required]
-          }),
+          // dateOfBirth: new FormControl(null, {
+          //   updateOn: 'blur',
+          //   validators: [Validators.required]
+          // }),
           medicalHistory: new FormControl(this.patient.medicalHistory, {
             updateOn: 'blur',
             validators: [Validators.required, Validators.maxLength(2500)]

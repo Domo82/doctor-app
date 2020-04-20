@@ -3,6 +3,30 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PatientService } from '../patient.service';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { PatientLocation } from '../patient/location.model';
+
+function base64toBlob(base64Data, contentType) {
+  contentType = contentType || '';
+  const sliceSize = 1024;
+  const byteCharacters = atob(base64Data);
+  const bytesLength = byteCharacters.length;
+  const slicesCount = Math.ceil(bytesLength / sliceSize);
+  const byteArrays = new Array(slicesCount);
+
+  for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+    const begin = sliceIndex * sliceSize;
+    const end = Math.min(begin + sliceSize, bytesLength);
+
+    const bytes = new Array(end - begin);
+    for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+      bytes[i] = byteCharacters[offset].charCodeAt(0);
+    }
+    byteArrays[sliceIndex] = new Uint8Array(bytes);
+  }
+  return new Blob(byteArrays, { type: contentType });
+}
+
+
 
 @Component({
   selector: 'app-create',
@@ -12,7 +36,11 @@ import { LoadingController } from '@ionic/angular';
 export class CreatePage implements OnInit {
   form: FormGroup;
 
-  constructor(private patientService: PatientService, private router: Router, private loadingCtrl: LoadingController) { }
+  constructor(
+    private patientService: PatientService,
+    private router: Router,
+    private loadingCtrl: LoadingController
+    ) { }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -64,13 +92,37 @@ export class CreatePage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.maxLength(10)]
       }),
+      image: new FormControl(null)
     });
   }
 
+  // onLocationPicked(location: PatientLocation) {
+  //   this.form.patchValue({location: location});
+  // }
+
+  onImagePicked(imageData: string | File) {
+    let imageFile;
+    if (typeof imageData === 'string') {
+      try {
+        imageFile = base64toBlob(
+          imageData.replace('data:image/png;base64,',''),
+          'image/jpeg'
+        );
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+    } else {
+      imageFile = imageData;
+    }
+    this.form.patchValue({image: imageFile});
+  }
+
   onCreatePatient() {
-    if(!this.form.valid) {
+    if(!this.form.valid || !this.form.get('image').value) {
       return;
     }
+    console.log(this.form.value);
     this.loadingCtrl
     .create({
       message: 'Creating New Patient...'

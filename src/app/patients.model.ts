@@ -1,3 +1,5 @@
+import { PatientLocation } from './patient/location.model';
+
 export class Patient {
     constructor(
         public id: string,

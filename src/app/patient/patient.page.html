@@ -1,13 +1,55 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-        <ion-menu-button menu="m1"></ion-menu-button>
-        <ion-back-button defaultHref="home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>patient</ion-title>
+    <ion-title>Send {{ isLoading ? 'Loading...' : patient?.forename }}'s Data?</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div *ngIf="isLoading">
+    <ion-spinner color="light"></ion-spinner>
+  </div>
+  <ion-grid *ngIf="!isLoading">
+    <ion-card>
+      <ion-card-content>
+        <ion-avatar>
+          <ion-img [src]="patient.imageUrl"></ion-img>
+        </ion-avatar>
+        <ion-card-title>
+        </ion-card-title>
+        <ion-label>
+          <h2>{{ patient?.forename }} {{ patient?.surname }}</h2>
+          <br>
+          <h2>ID No: {{ patient?.id }}</h2>
+          <h2>PPS No: {{ patient?.pps }}</h2>
+          <h2>Medical History: {{ patient?.medicalHistory }}</h2>
+          <h2>Drug History: {{ patient?.drugHistory }}</h2>
+          <br>
+          <h2>Emergency Contacts:</h2>
+          <h2>Emergency Contact 1: {{ patient?.emergencyContact1 }}</h2>
+          <h2>Emergency Contact 2: {{ patient?.emergencyContact2 }}</h2>
+          <h2>Emergency Contact 3: {{ patient?.emergencyContact3 }}</h2>
+          <br>
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
+    <div class="ion-text-center">
+    <ion-row >
+      <ion-col>
+        <app-location-pickers></app-location-pickers>
+      </ion-col>
+    </ion-row>
+    <ion-button
+      class="ion-margin"
+      color="light"
+      >Submit
+    </ion-button>
+    <ion-button
+      class="ion-margin"
+      color="danger"
+      [routerLink]="['/', 'details', patient.id]">Cancel
+    </ion-button>
+    </div>
+
+  </ion-grid>
 
 </ion-content>

@@ -46,7 +46,7 @@ export class DetailsPage implements OnInit, OnDestroy {
             {
               text: 'Okay',
               handler:()=> {
-              this.router.navigate(['/home']);
+              this.router.navigate(['/list']);
             }
           }
         ]

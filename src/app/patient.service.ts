@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
+//import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { take, map, tap, delay, switchMap } from 'rxjs/operators';
+import { AutoCompleteService } from 'ionic4-auto-complete';
+import { PatientLocation } from './patient/location.model';
 
 import { Patient } from './patients.model';
 import { AuthService } from './auth/auth.service';
 import { HttpClient } from '@angular/common/http';
+// import { type } from 'os';
 
 interface PatientData{
   address: string;
@@ -23,19 +28,56 @@ interface PatientData{
   surname: string;
 }
 
+export enum SearchType {
+  all = '',
+  movie = 'movie',
+  series = 'series',
+  episode = 'episode'
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
   private _patients = new BehaviorSubject<Patient[]>([]);
+  // url = 'https://medi-comm-d1778.firebaseio.com/patients.json';
+  url = 'https://medi-comm-d1778.firebaseio.com/patients.json';
+  apiKey = 'AIzaSyBpqn2LpO8UJe8SSIJneQuPLikA_WilPpA';
+
+  labelAttribute = 'name';
+
+  private users: any[] = [];
+
 
   get patients() {
     return this._patients.asObservable();
   }
 
-  constructor(private authService: AuthService, private http: HttpClient) { }
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient) { }
 
-  // fetch our existing places with http GET request
+    SearchData(id: string, type: SearchType): Observable<any> {
+      return this.http.get(`${this.url}?s=${encodeURI(id)}&type=${type}&apikey=${this.apiKey}`).pipe(
+        map(results => results['Search'])
+      );
+    }
+
+    getDetails(id) {
+      return this.http.get(`${this.url}?i=${id}&plot=full&apikey=${this.apiKey}`);
+    }
+
+    // getPatient(id: string) {
+  //   return this.patients.pipe(
+  //     take(1),
+  //     map(patients => {
+  //       return { ...patients.find(p => p.id === id)};
+  //     })
+  //   );
+  // }
+
+
+  // fetch our existing patients with http GET request
   fetchPatient() {
     return this.http
     .get<{[key:string]: PatientData }>('https://medi-comm-d1778.firebaseio.com/patients.json'
@@ -74,15 +116,6 @@ export class PatientService {
     })
   );
 }
-
-  // getPatient(id: string) {
-  //   return this.patients.pipe(
-  //     take(1),
-  //     map(patients => {
-  //       return { ...patients.find(p => p.id === id)};
-  //     })
-  //   );
-  // }
 
   getPatient(id: string) {
     return this.http
@@ -177,7 +210,7 @@ export class PatientService {
       allergies: string,
       emergencyContact1: string,
       emergencyContact2: string,
-      emergencyContact3: string,
+      emergencyContact3: string
       ){
         let updatedPatients: Patient[];
         return this.patients.pipe(
@@ -226,6 +259,18 @@ export class PatientService {
         })
       );
     }
+
+    // search() {
+    //   let self = this;
+    //   self.results = self.afs.collection(`patients`, ref => ref
+    //     .orderBy("forename")
+    //     .startAt(self.searchValue.toLowerCase())
+    //     .endAt(self.searchValue.toLowerCase()+"\uf8ff")
+    //     .limit(2))
+    //     .valueChanges();
+    // }
+
+
 }
 
 
