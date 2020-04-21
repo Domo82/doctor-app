@@ -4,6 +4,7 @@ import { PatientService } from '../patient.service';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { PatientLocation } from '../patient/location.model';
+import { switchMap } from 'rxjs/operators';
 
 function base64toBlob(base64Data, contentType) {
   contentType = contentType || '';
@@ -130,19 +131,23 @@ export class CreatePage implements OnInit {
     .then(loadingEl => {
       loadingEl.present();
       this.patientService
-      .addPatient(
-        this.form.value.forename,
-        this.form.value.surname,
-        new Date(this.form.value.dateOfBirth),
-        this.form.value.pps,
-        this.form.value.address,
-        this.form.value.medicalHistory,
-        this.form.value.drugHistory,
-        this.form.value.allergies,
-        this.form.value.emergencyContact1,
-        this.form.value.emergencyContact2,
-        this.form.value.emergencyContact3,
-        this.form.value.imageUrl
+        .uploadImage(this.form.get('image').value).pipe(switchMap(uploadRes => {
+          return this.patientService
+          .addPatient(
+            this.form.value.forename,
+            this.form.value.surname,
+            new Date(this.form.value.dateOfBirth),
+            this.form.value.pps,
+            this.form.value.address,
+            this.form.value.medicalHistory,
+            this.form.value.drugHistory,
+            this.form.value.allergies,
+            this.form.value.emergencyContact1,
+            this.form.value.emergencyContact2,
+            this.form.value.emergencyContact3,
+            uploadRes.imageUrl
+          );
+        })
       )
       .subscribe(() => {
         loadingEl.dismiss();

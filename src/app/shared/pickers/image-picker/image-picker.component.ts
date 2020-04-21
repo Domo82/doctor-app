@@ -11,7 +11,7 @@ export class ImagePickerComponent implements OnInit {
   @Output() imagePick = new EventEmitter<string | File>();
   selectedImage: string;
   usePicker = false;
-  
+
 
   constructor(private platform: Platform) { }
 

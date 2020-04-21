@@ -143,6 +143,14 @@ export class PatientService {
       })
     );
   }
+
+  uploadImage(image: File) {
+    const uploadData = new FormData();
+    uploadData.append('image', image);
+
+    return this.http.post<{imageUrl: string, imagePath: string}>('https://us-central1-medi-comm-d1778.cloudfunctions.net/storeImage', uploadData);
+  }
+
   addPatient(
     forename: string,
     surname: string,
@@ -171,7 +179,7 @@ export class PatientService {
         emergencyContact1,
         emergencyContact2,
         emergencyContact3,
-        '/assets/images/newuser.png',
+        imageUrl,
         // fetch creator from auth service
         this.authService.creatorId,
         this.authService.creatorName
