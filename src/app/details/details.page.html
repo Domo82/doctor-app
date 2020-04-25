@@ -14,18 +14,28 @@
   <ion-grid *ngIf="!isLoading">
     <ion-card>
       <ion-card-content>
+        <h2>RFID No: {{ patient?.pps }}</h2>
+        <br>
         <ion-avatar>
           <ion-img [src]="patient.imageUrl"></ion-img>
         </ion-avatar>
+        <br>
         <ion-card-title>
         </ion-card-title>
         <ion-label>
           <h2>{{ patient?.forename }} {{ patient?.surname }}</h2>
           <br>
-          <h2>ID No: {{ patient?.id }}</h2>
-          <h2>PPS No: {{ patient?.pps }}</h2>
-          <h2>Medical History: {{ patient?.medicalHistory }}</h2>
-          <h2>Drug History: {{ patient?.drugHistory }}</h2>
+          <h2>ID No:</h2>
+          <p>{{ patient?.id }}</p>
+          <br>
+          <h2>EIRCODE:</h2>
+          <p>{{ patient.address }}</p>
+          <br>
+          <h2>Medical History:</h2>
+          <p>{{ patient?.medicalHistory }}</p>
+          <br>
+          <h2>Drug History:</h2>
+          <p>{{ patient?.drugHistory }}</p>
           <br>
           <h2>Emergency Contacts:</h2>
           <h2>Emergency Contact 1: {{ patient?.emergencyContact1 }}</h2>

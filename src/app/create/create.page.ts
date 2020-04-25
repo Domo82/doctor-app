@@ -145,7 +145,8 @@ export class CreatePage implements OnInit {
             this.form.value.emergencyContact1,
             this.form.value.emergencyContact2,
             this.form.value.emergencyContact3,
-            uploadRes.imageUrl
+            uploadRes.imageUrl,
+            this.form.value.locationFound
           );
         })
       )

@@ -133,7 +133,8 @@ export class EditPage implements OnInit, OnDestroy {
         this.form.value.allergies,
         this.form.value.emergencyContact1,
         this.form.value.emergencyContact2,
-        this.form.value.emergencyContact3
+        this.form.value.emergencyContact3,
+        this.form.value.locationFound
       ).subscribe(() => {
         loadingEl.dismiss();
         this.form.reset();
@@ -141,6 +142,7 @@ export class EditPage implements OnInit, OnDestroy {
       });
     });
   }
+
 
   ngOnDestroy() {
     if (this.patientSubscription) {

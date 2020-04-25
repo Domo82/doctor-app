@@ -15,6 +15,10 @@ const routes: Routes = [
   { path: 'list', loadChildren: './list/list.module#ListPageModule', canLoad: [AuthGuard] },
   { path: 'edit', loadChildren: './edit/edit.module#EditPageModule', canLoad: [AuthGuard] },
   { path: 'edit/:id', loadChildren: './edit/edit.module#EditPageModule', canLoad: [AuthGuard] },
+  { path: 'e-triage', loadChildren: './e-triage/e-triage.module#ETriagePageModule', canLoad: [AuthGuard] },
+  { path: 'e-triage-details/:id', loadChildren: './e-triage-details/e-triage-details.module#ETriageDetailsPageModule', canLoad: [AuthGuard] },
+
+
 
 
 ];

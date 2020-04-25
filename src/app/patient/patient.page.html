@@ -1,55 +1,141 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Send {{ isLoading ? 'Loading...' : patient?.forename }}'s Data?</ion-title>
+    <ion-buttons slot="start">
+        <ion-back-button defaultHref="list"></ion-back-button>
+        </ion-buttons>
+    <ion-title>Send {{ isLoading ? 'Loading...' : patient?.forename }}'s Details</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onSendDetails()" [disabled]="!form?.valid">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <div *ngIf="isLoading">
-    <ion-spinner color="light"></ion-spinner>
+    <ion-spinner class="ion-text-center" color="light"></ion-spinner>
   </div>
-  <ion-grid *ngIf="!isLoading">
-    <ion-card>
-      <ion-card-content>
-        <ion-avatar>
-          <ion-img [src]="patient.imageUrl"></ion-img>
-        </ion-avatar>
-        <ion-card-title>
-        </ion-card-title>
-        <ion-label>
-          <h2>{{ patient?.forename }} {{ patient?.surname }}</h2>
-          <br>
-          <h2>ID No: {{ patient?.id }}</h2>
-          <h2>RFID No: {{ patient?.pps }}</h2>
-          <h2>Medical History: {{ patient?.medicalHistory }}</h2>
-          <h2>Drug History: {{ patient?.drugHistory }}</h2>
-          <br>
-          <h2>Emergency Contacts:</h2>
-          <h2>Emergency Contact 1: {{ patient?.emergencyContact1 }}</h2>
-          <h2>Emergency Contact 2: {{ patient?.emergencyContact2 }}</h2>
-          <h2>Emergency Contact 3: {{ patient?.emergencyContact3 }}</h2>
-          <br>
-        </ion-label>
-      </ion-card-content>
-    </ion-card>
-    <div class="ion-text-center">
-    <ion-row >
-      <ion-col>
-        <app-location-pickers></app-location-pickers>
-      </ion-col>
-    </ion-row>
-    <ion-button
-      class="ion-margin"
-      color="light"
-      >Submit
-    </ion-button>
-    <ion-button
-      class="ion-margin"
-      color="danger"
-      [routerLink]="['/', 'details', patient.id]">Cancel
-    </ion-button>
-    </div>
-
-  </ion-grid>
-
+    <form [formGroup]="form" *ngIf="!isLoading">
+        <ion-grid>
+          <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+              <ion-item>
+                <ion-label position="floating">Forename</ion-label>
+                <ion-input
+                type="text"
+                autocomplete
+                autocorrect
+                required
+                formControlName="forename"
+                ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Surname</ion-label>
+                <ion-input
+                type="text"
+                autocomplete
+                autocorrect
+                required
+                formControlName="surname"
+                ></ion-input>
+                </ion-item>
+              <ion-item>
+                <ion-label position="floating">Address</ion-label>
+                <ion-input
+                type="text"
+                autocomplete
+                autocorrect
+                placeholder="Address Line 1"
+                formControlName="address"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <!-- <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+              <ion-item>
+                <ion-label position="floating">Date of Birth</ion-label>
+                <ion-datetime
+                min="1900-01-01"
+                formControlName="dateOfBirth"
+                ></ion-datetime>
+              </ion-item>
+            </ion-col>
+          </ion-row> -->
+          <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+              <ion-item>
+              <ion-label position="floating">Medical History</ion-label>
+              <ion-textarea
+              rows="3"
+              formControlName="medicalHistory"
+              ></ion-textarea>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+              <ion-item>
+              <ion-label position="floating">Drug History</ion-label>
+              <ion-textarea
+              rows="3"
+              formControlName="drugHistory"
+              ></ion-textarea>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+              <ion-item>
+              <ion-label position="floating">Allergies</ion-label>
+              <ion-textarea
+              rows="3"
+              formControlName="allergies"
+              ></ion-textarea>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+              <ion-item>
+              <ion-label position="floating">Emergency Contact 1
+            </ion-label>
+              <ion-input
+              type="number"
+              autocomplete
+              autocorrect
+              formControlName="emergencyContact1"
+              ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+              <ion-item>
+                <ion-label position="floating">Emergency Contact 2</ion-label>
+                <ion-input
+                type="number"
+                autocomplete
+                autocorrect
+                formControlName="emergencyContact2"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+              <ion-item>
+              <ion-label position="floating">Emergency Contact 3</ion-label>
+              <ion-input
+              type="number"
+              autocomplete
+              autocorrect
+              formControlName="emergencyContact3"
+              ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
 </ion-content>

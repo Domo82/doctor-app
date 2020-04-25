@@ -23,6 +23,7 @@ interface PatientData{
   emergencyContact3: string;
   forename: string;
   imageUrl: string;
+  locationFound: string,
   medicalHistory: string;
   pps: string;
   surname: string;
@@ -77,7 +78,7 @@ export class PatientService {
   // }
 
 
-  // fetch our existing patients with http GET request
+  // fetch our existing patients from patients db with http GET request
   fetchPatient() {
     return this.http
     .get<{[key:string]: PatientData }>('https://medi-comm-d1778.firebaseio.com/patients.json'
@@ -103,7 +104,8 @@ export class PatientService {
             resData[key].emergencyContact3,
             resData[key].imageUrl,
             resData[key].creatorName,
-            resData[key].creatorId
+            resData[key].creatorId,
+            resData[key].locationFound
             )
           );
         }
@@ -115,6 +117,47 @@ export class PatientService {
       this._patients.next(patients);
     })
   );
+}
+
+ // fetch our existing patient event from the events db with http GET request
+ fetchPatientEvent() {
+  return this.http
+  .get<{[key:string]: PatientData }>('https://events-1ebb1.firebaseio.com/events.json'
+  )
+  .pipe(
+    map(resData => {
+    const patients = [];
+    for (const key in resData) {
+      if (resData.hasOwnProperty(key)) {
+        patients.push(
+          new Patient(
+          key,
+          resData[key].forename,
+          resData[key].surname,
+          new Date (resData[key].dateOfBirth),
+          resData[key].pps,
+          resData[key].address,
+          resData[key].medicalHistory,
+          resData[key].drugHistory,
+          resData[key].allergies,
+          resData[key].emergencyContact1,
+          resData[key].emergencyContact2,
+          resData[key].emergencyContact3,
+          resData[key].imageUrl,
+          resData[key].creatorName,
+          resData[key].creatorId,
+          resData[key].locationFound
+          )
+        );
+      }
+    }
+    return patients;
+    //return[];
+  }),
+  tap(patients => {
+    this._patients.next(patients);
+  })
+);
 }
 
   getPatient(id: string) {
@@ -138,7 +181,8 @@ export class PatientService {
           patientData.emergencyContact3,
           patientData.imageUrl,
           patientData.creatorName,
-          patientData.creatorId
+          patientData.creatorId,
+          patientData.locationFound
            )
       })
     );
@@ -163,7 +207,8 @@ export class PatientService {
     emergencyContact1: string,
     emergencyContact2: string,
     emergencyContact3: string,
-    imageUrl: string
+    imageUrl: string,
+    locationFound: string
     ) {
       let generatedId: string;
       const newPatient = new Patient(
@@ -182,7 +227,8 @@ export class PatientService {
         imageUrl,
         // fetch creator from auth service
         this.authService.creatorId,
-        this.authService.creatorName
+        this.authService.creatorName,
+        locationFound
         );
         return this.http
         .post<{name : string}>('https://medi-comm-d1778.firebaseio.com/patients.json',{
@@ -208,6 +254,68 @@ export class PatientService {
       // );
     }
 
+    // updatePatient(
+    //   id: string,
+    //   forename: string,
+    //   surname: string,
+    //   address: string,
+    //   medicalHistory: string,
+    //   drugHistory: string,
+    //   allergies: string,
+    //   emergencyContact1: string,
+    //   emergencyContact2: string,
+    //   emergencyContact3: string,
+    //   locationFound: string
+    //   ){
+    //     let updatedPatients: Patient[];
+    //     return this.patients.pipe(
+    //       take(1),
+    //       switchMap(patients => {
+    //         if (!patients || patients.length <= 0) {
+    //           return this.fetchPatient();
+    //         } else {
+    //           return of(patients);
+    //         }
+    //     }),
+    //     switchMap(patients => {
+    //       if (!patients || patients.length <=0) {
+    //         return this.fetchPatient();
+    //       } else {
+    //         return of(patients);
+    //       }
+    //     }),
+    //     switchMap(patients => {
+    //       const updatedPatientIndex = patients.findIndex(pat => pat.id === id);
+    //       const updatedPatients = [...patients];
+    //       const oldPatient = updatedPatients[updatedPatientIndex];
+    //       updatedPatients[updatedPatientIndex] = new Patient(
+    //         oldPatient.id,
+    //         forename,
+    //         surname,
+    //         oldPatient.dateOfBirth,
+    //         oldPatient.pps,
+    //         address,
+    //         medicalHistory,
+    //         drugHistory,
+    //         allergies,
+    //         emergencyContact1,
+    //         emergencyContact2,
+    //         emergencyContact3,
+    //         oldPatient.imageUrl,
+    //         oldPatient.creatorId,
+    //         oldPatient.creatorName,
+    //         locationFound
+    //         );
+    //       return this.http.post(`https://medi-comm-d1778.firebaseio.com/patients/${id}.json`,
+    //       {...updatedPatients[updatedPatientIndex], id:null }
+    //       );
+    //     }),
+    //     tap(() => {
+    //       this._patients.next(updatedPatients);
+    //     })
+    //   );
+    // }
+
     updatePatient(
       id: string,
       forename: string,
@@ -218,7 +326,8 @@ export class PatientService {
       allergies: string,
       emergencyContact1: string,
       emergencyContact2: string,
-      emergencyContact3: string
+      emergencyContact3: string,
+      locationFound: string
       ){
         let updatedPatients: Patient[];
         return this.patients.pipe(
@@ -256,7 +365,8 @@ export class PatientService {
             emergencyContact3,
             oldPatient.imageUrl,
             oldPatient.creatorId,
-            oldPatient.creatorName
+            oldPatient.creatorName,
+            locationFound
             );
           return this.http.put(`https://medi-comm-d1778.firebaseio.com/patients/${id}.json`,
           {...updatedPatients[updatedPatientIndex], id:null }
@@ -266,6 +376,83 @@ export class PatientService {
           this._patients.next(updatedPatients);
         })
       );
+    }
+
+
+    sendPatientEvent(
+      id: string,
+      forename: string,
+      surname: string,
+      address: string,
+      medicalHistory: string,
+      drugHistory: string,
+      allergies: string,
+      emergencyContact1: string,
+      emergencyContact2: string,
+      emergencyContact3: string,
+      locationFound: string
+      ){
+        let updatedPatients: Patient[];
+        return this.patients.pipe(
+          take(1),
+          switchMap(patients => {
+            if (!patients || patients.length <= 0) {
+              return this.fetchPatient();
+            } else {
+              return of(patients);
+            }
+        }),
+        switchMap(patients => {
+          if (!patients || patients.length <=0) {
+            return this.fetchPatient();
+          } else {
+            return of(patients);
+          }
+        }),
+        switchMap(patients => {
+          const updatedPatientIndex = patients.findIndex(pat => pat.id === id);
+          const updatedPatients = [...patients];
+          const oldPatient = updatedPatients[updatedPatientIndex];
+          updatedPatients[updatedPatientIndex] = new Patient(
+            oldPatient.id,
+            forename,
+            surname,
+            oldPatient.dateOfBirth,
+            oldPatient.pps,
+            address,
+            medicalHistory,
+            drugHistory,
+            allergies,
+            emergencyContact1,
+            emergencyContact2,
+            emergencyContact3,
+            oldPatient.imageUrl,
+            oldPatient.creatorId,
+            oldPatient.creatorName,
+            locationFound
+            );
+          return this.http.post(`https://events-1ebb1.firebaseio.com/events/${id}.json`,
+          {...updatedPatients[updatedPatientIndex], id:null }
+          );
+        }),
+        tap(() => {
+          this._patients.next(updatedPatients);
+        })
+      );
+    }
+
+    completeTriage(id: string) {
+      return this.http
+      .delete(
+        `https://events-1ebb1.firebaseio.com/events/${id}.json`
+        ).pipe(
+          switchMap(() => {
+            return this.patients;
+          }),
+          take(1),tap(patients => {
+            this._patients.next(patients.filter(p => p.id !== id));
+          })
+        );
     }
 
     // search() {

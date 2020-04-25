@@ -29,6 +29,21 @@ const firebaseConfig = {
   appId: "1:939531786941:web:dbfc599107d6e7cf2135d4"
 };
 
+
+// Events database
+const firebaseEventsConfig = {
+  apiKey: "AIzaSyBRCRK13ThNPEZM7ow1yfhR6DvyhdjcSF8",
+  authDomain: "events-1ebb1.firebaseapp.com",
+  databaseURL: "https://events-1ebb1.firebaseio.com",
+  projectId: "events-1ebb1"
+};
+
+
+
+
+
+
+
 // const firebaseConfig = {
 //   apiKey: "AIzaSyDncd1aUlmEf3CS6SxZPWuPNmEzBRGcwlw",
 //   authDomain: "medi-comm-d1778.firebaseapp.com",

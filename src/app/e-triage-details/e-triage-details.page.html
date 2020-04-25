@@ -1,9 +1,68 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
+      <ion-back-button defaultHref="list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isLoading ? 'Loading...' : patient?.forename }}'s Triage Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="isLoading">
+    <ion-spinner color="light"></ion-spinner>
+  </div>
+  <ion-grid *ngIf="!isLoading">
+    <ion-card>
+      <ion-card-content>
+        <h2>RFID No: {{ patient?.pps }}</h2>
+        <br>
+        <ion-avatar>
+          <ion-img [src]="patient.imageUrl"></ion-img>
+        </ion-avatar>
+        <br>
+        <ion-card-title>
+        </ion-card-title>
+        <ion-label>
+          <h2>{{ patient?.forename }} {{ patient?.surname }}</h2>
+          <br>
+          <h2>ID No:</h2>
+          <p>{{ patient?.id }}</p>
+          <br>
+          <h2>EIRCODE:</h2>
+          <p>{{ patient.address }}</p>
+          <br>
+          <h2>Medical History:</h2>
+          <p>{{ patient?.medicalHistory }}</p>
+          <br>
+          <h2>Drug History:</h2>
+          <p>{{ patient?.drugHistory }}</p>
+          <br>
+          <h2>Emergency Contacts:</h2>
+          <h2>Emergency Contact 1: {{ patient?.emergencyContact1 }}</h2>
+          <h2>Emergency Contact 2: {{ patient?.emergencyContact2 }}</h2>
+          <h2>Emergency Contact 3: {{ patient?.emergencyContact3 }}</h2>
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-text-center">
+      <ion-button
+        class="ion-margin"
+        color="success"
+        (click)="onComplete(patient.id)"
+        >Triage Complete
+      </ion-button>
+    </div>
+
+  </ion-grid>
+</ion-content>
+
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
         <ion-back-button defaultHref="list"></ion-back-button>
         </ion-buttons>
-    <ion-title>Edit {{ isLoading ? 'Loading...' : patient?.forename }}'s Details</ion-title>
+    <ion-title>Edit Details</ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)="onUpdateDetails()" [disabled]="!form?.valid">
         <ion-icon name="checkmark" slot="icon-only"></ion-icon>
@@ -52,7 +111,7 @@
               </ion-item>
             </ion-col>
           </ion-row>
-          <!-- <ion-row>
+          <ion-row>
             <ion-col size-sm="6" offset-sm="3">
               <ion-item>
                 <ion-label position="floating">Date of Birth</ion-label>
@@ -62,7 +121,7 @@
                 ></ion-datetime>
               </ion-item>
             </ion-col>
-          </ion-row> -->
+          </ion-row>
           <ion-row>
             <ion-col size-sm="6" offset-sm="3">
               <ion-item>
@@ -138,4 +197,4 @@
           </ion-row>
         </ion-grid>
       </form>
-</ion-content>
+</ion-content> -->
