@@ -15,6 +15,9 @@
         <ion-list >
           <ion-item *ngFor="let patient of loadedPatients"
           [routerLink]="['/', 'e-triage-details', patient.id]" detail>
+            <ion-avatar slot="start">
+              <ion-img [src]="patient.imageUrl"></ion-img>
+            </ion-avatar>
             <ion-label>
               <h2>{{ patient.forename }} {{ patient.surname }}</h2>
               <p>Patient ID: {{ patient.id }}</p>

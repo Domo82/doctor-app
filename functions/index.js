@@ -1,4 +1,6 @@
 const functions = require('firebase-functions');
+admin.initializeApp(functions.config().firebase);
+
 const cors = require('cors')({ origin: true });
 const Busboy = require('busboy');
 const os = require('os');
@@ -11,6 +13,9 @@ const { Storage } = require('@google-cloud/storage');
 const storage = new Storage({
   projectId: 'medi-comm-d1778'
 });
+
+exports.textStatus = functions.database
+.ref
 
 exports.storeImage = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {

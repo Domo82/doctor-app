@@ -6,7 +6,7 @@ export class Patient {
         public forename: string,
         public surname: string,
         public dateOfBirth: Date,
-        public pps: string,
+        public rfid: string,
         public address: string,
         public medicalHistory: string,
         public drugHistory: string,
@@ -16,7 +16,7 @@ export class Patient {
         public emergencyContact3: string,
         public imageUrl: string,
         public creatorName: string,
-        public creatorId: string,
-        public locationFound: string
+        public userId: string,
+        public locationFound: PatientLocation
     ) {}
 }

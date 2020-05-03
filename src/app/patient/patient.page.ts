@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { Patient } from '../patients.model';
 import { PatientService } from '../patient.service';
+import { PatientLocation } from './location.model';
 
 @Component({
   selector: 'app-patient',
@@ -79,7 +80,8 @@ export class PatientPage implements OnInit, OnDestroy {
           emergencyContact3: new FormControl(this.patient.emergencyContact3, {
             updateOn: 'blur',
             validators: [Validators.maxLength(10)]
-          })
+          }),
+          locationFound: new FormControl(null, {validators: [Validators.required]})
         });
         this.isLoading = false;
       }, error => {
@@ -111,7 +113,9 @@ export class PatientPage implements OnInit, OnDestroy {
   // }
 
 
-
+  onLocationPicked(locationFound: PatientLocation) {
+    this.form.patchValue({locationFound: locationFound});
+  }
 
   onSendDetails() {
     if(!this.form.valid) {
@@ -119,7 +123,7 @@ export class PatientPage implements OnInit, OnDestroy {
     }
     this.loadingCtrl
     .create({
-      message: 'Updating details...'
+      message: 'Sending Patient etails...'
     })
     .then(loadingEl => {
       loadingEl.present();

@@ -6,7 +6,7 @@ import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AutoCompleteModule } from 'ionic4-auto-complete';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -20,6 +20,8 @@ import { PatientService } from './patient.service';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
+
+import { OneSignal } from '@ionic-native/OneSignal/ngx';
 
 
 
@@ -42,6 +44,7 @@ import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
     HttpClientModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    ReactiveFormsModule,
     NgxQRCodeModule],
 
   providers: [
@@ -50,7 +53,8 @@ import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
     PatientService,
     { provide:RouteReuseStrategy, useClass: IonicRouteStrategy },
     BarcodeScanner,
-    Base64ToGallery
+    Base64ToGallery,
+    OneSignal
   ],
   bootstrap: [AppComponent]
 })

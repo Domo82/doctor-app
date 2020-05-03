@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { PatientService } from '../patient.service';
 import { Patient } from '../patients.model';
+import { PatientLocation } from '../patient/location.model';
 
 @Component({
   selector: 'app-e-triage-details',
@@ -16,6 +17,7 @@ export class ETriageDetailsPage implements OnInit {
   isLoading = false;
   patientId: string;
   private patientSubscription: Subscription;
+  pLocation: PatientLocation;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,7 +35,7 @@ export class ETriageDetailsPage implements OnInit {
         }
         this.isLoading = true;
         //this.patientId = paramMap.get('id');
-        this.patientSubscription = this.patientSrvc.getPatient(paramMap.get('id')).subscribe(patient => {
+        this.patientSubscription = this.patientSrvc.getTriagePatient(paramMap.get('id')).subscribe(patient => {
           this.patient = patient;
           this.isLoading = false;
         }, error => {
@@ -53,6 +55,10 @@ export class ETriageDetailsPage implements OnInit {
         }
       );
     });
+  }
+
+  location() {
+
   }
 
   onComplete(id: string) {

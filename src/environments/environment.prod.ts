@@ -5,8 +5,7 @@ export const environment = {
     authDomain: "medi-comm-d1778.firebaseio.com",
     databaseURL: "https://medi-comm-d1778.firebaseio.com/patients",
     projectId: "medi-comm-d1778",
-    storageBucket: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    messagingSenderId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    
   }
 };
 

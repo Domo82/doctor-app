@@ -36,6 +36,7 @@ function base64toBlob(base64Data, contentType) {
 })
 export class CreatePage implements OnInit {
   form: FormGroup;
+  order: any;
 
   constructor(
     private patientService: PatientService,
@@ -61,7 +62,7 @@ export class CreatePage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required, Validators.maxLength(250)]
       }),
-      pps: new FormControl(null, {
+      rfid: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.max(12)]
       }),
@@ -79,7 +80,7 @@ export class CreatePage implements OnInit {
       }),
       emergencyContact1: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.maxLength(10)]
+        validators: [Validators.maxLength(12)]
       }),
       emergencyContact2: new FormControl(null, {
         updateOn: 'blur',
@@ -96,6 +97,7 @@ export class CreatePage implements OnInit {
       image: new FormControl(null)
     });
   }
+
 
   // onLocationPicked(location: PatientLocation) {
   //   this.form.patchValue({location: location});
@@ -137,7 +139,7 @@ export class CreatePage implements OnInit {
             this.form.value.forename,
             this.form.value.surname,
             new Date(this.form.value.dateOfBirth),
-            this.form.value.pps,
+            this.form.value.rfid,
             this.form.value.address,
             this.form.value.medicalHistory,
             this.form.value.drugHistory,
@@ -146,7 +148,7 @@ export class CreatePage implements OnInit {
             this.form.value.emergencyContact2,
             this.form.value.emergencyContact3,
             uploadRes.imageUrl,
-            this.form.value.locationFound
+            this.form.value.location
           );
         })
       )

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 //import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { BehaviorSubject, of, Observable } from 'rxjs';
-import { take, map, tap, delay, switchMap } from 'rxjs/operators';
-import { AutoCompleteService } from 'ionic4-auto-complete';
+import { BehaviorSubject, of, Observable, observable } from 'rxjs';
+
+import { take, map, tap, delay, switchMap, toArray } from 'rxjs/operators';
+import { AutoCompleteModule } from 'ionic4-auto-complete';
 import { PatientLocation } from './patient/location.model';
 
 import { Patient } from './patients.model';
@@ -23,59 +24,136 @@ interface PatientData{
   emergencyContact3: string;
   forename: string;
   imageUrl: string;
-  locationFound: string,
+  locationFound: PatientLocation,
   medicalHistory: string;
-  pps: string;
+  rfid: string;
   surname: string;
 }
 
 export enum SearchType {
   all = '',
+  surname = 'surname',
+  // rfid = 'rfid',
+   //id = 'id',
+  //name = 'name'
   movie = 'movie',
   series = 'series',
   episode = 'episode'
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
-  private _patients = new BehaviorSubject<Patient[]>([]);
-  // url = 'https://medi-comm-d1778.firebaseio.com/patients.json';
+export class PatientService implements AutoCompleteModule{
+
   url = 'https://medi-comm-d1778.firebaseio.com/patients.json';
+  //url = 'http://www.omdbapi.com/';
   apiKey = 'AIzaSyBpqn2LpO8UJe8SSIJneQuPLikA_WilPpA';
+  //AIzaSyDncd1aUlmEf3CS6SxZPWuPNmEzBRGcwlw
+  //apiKey = 'e18ea211'
 
-  labelAttribute = 'name';
-
-  private users: any[] = [];
-
+  private _patients = new BehaviorSubject<Patient[]>([]);
 
   get patients() {
     return this._patients.asObservable();
   }
 
+  public filterPatient: any = [];
+
   constructor(
     private authService: AuthService,
-    private http: HttpClient) { }
+    private http: HttpClient) {
 
-    SearchData(id: string, type: SearchType): Observable<any> {
-      return this.http.get(`${this.url}?s=${encodeURI(id)}&type=${type}&apikey=${this.apiKey}`).pipe(
-        map(results => results['Search'])
+      // this.filterPatient = [
+      //   {
+      //     firstName: "Dominic",
+      //     secondName: "Dillon",
+      //     RFID: "39384710",
+      //     EIRCODE: "D05 YA44",
+      //     drug: "NA",
+      //     Surgery: "NA",
+      //     allergy: "NA"
+      //   },
+      //   {
+      //     firstName: "Patrick",
+      //     secondName: "Bradley",
+      //     RFID: "38453942",
+      //     EIRCODE: "W23 V2P2",
+      //     drug: "NA",
+      //     Surgery: "Last Hair Cut",
+      //     allergy: "NA"
+      //   },
+      //   {
+      //     firstName: "Graham",
+      //     secondName: "Farrell",
+      //     RFID: "37792934",
+      //     EIRCODE: "B45 V2P2",
+      //     drug: "Lots",
+      //     Surgery: "Crazy steel bars in his toes",
+      //     allergy: "Tom Colgan"
+      //   },
+      //   {
+      //     firstName: "Graham",
+      //     secondName: "Farrell",
+      //     RFID: "37792934",
+      //     EIRCODE: "B23 T4Y9",
+      //     drug: "Lots",
+      //     Surgery: "Definitely needs it",
+      //     allergy: "Work"
+      //   }
+      // ];
+    }
+
+    getRemoteData() {
+      console.log(this.http.get('https://medi-comm-d1778.firebaseio.com/patients.json'));
+    }
+
+    searchData(surname: string, type: SearchType): Observable<any> {
+      return this.http.get<Observable<any>>(`${this.url}?s=${encodeURI(surname)}&type=${type}&apikey=${this.apiKey}`).pipe(
+        map(results => {
+          console.log('RAW: ', results);
+          return results['Search'];
+        })
       );
     }
 
-    getDetails(id) {
-      return this.http.get(`${this.url}?i=${id}&plot=full&apikey=${this.apiKey}`);
+    getDetails(surname: string): Observable<any> {
+      return this.http.get(`${this.url}?i=${surname}&plot=full&apikey=${this.apiKey}`).pipe(
+        map(resData => {
+          const patients = [];
+          for (const key in resData) {
+            if (resData.hasOwnProperty(key)) {
+              patients.push(
+                new Patient(
+                  key,
+                  resData[key].forename,
+                  resData[key].surname,
+                  new Date (resData[key].dateOfBirth),
+                  resData[key].rfid,
+                  resData[key].address,
+                  resData[key].medicalHistory,
+                  resData[key].drugHistory,
+                  resData[key].allergies,
+                  resData[key].emergencyContact1,
+                  resData[key].emergencyContact2,
+                  resData[key].emergencyContact3,
+                  resData[key].imageUrl,
+                  resData[key].creatorName,
+                  resData[key].creatorId,
+                  resData[key].locationFound
+                )
+              );
+            }
+          }
+          return patients;
+          //return[];
+        }),
+        tap(patients => {
+          this._patients.next(patients);
+        })
+      );
     }
-
-    // getPatient(id: string) {
-  //   return this.patients.pipe(
-  //     take(1),
-  //     map(patients => {
-  //       return { ...patients.find(p => p.id === id)};
-  //     })
-  //   );
-  // }
 
 
   // fetch our existing patients from patients db with http GET request
@@ -94,7 +172,7 @@ export class PatientService {
             resData[key].forename,
             resData[key].surname,
             new Date (resData[key].dateOfBirth),
-            resData[key].pps,
+            resData[key].rfid,
             resData[key].address,
             resData[key].medicalHistory,
             resData[key].drugHistory,
@@ -135,7 +213,7 @@ export class PatientService {
           resData[key].forename,
           resData[key].surname,
           new Date (resData[key].dateOfBirth),
-          resData[key].pps,
+          resData[key].rfid,
           resData[key].address,
           resData[key].medicalHistory,
           resData[key].drugHistory,
@@ -171,7 +249,35 @@ export class PatientService {
           patientData.forename,
           patientData.surname,
           new Date(patientData.dateOfBirth),
-          patientData.pps,
+          patientData.rfid,
+          patientData.address,
+          patientData.medicalHistory,
+          patientData.drugHistory,
+          patientData.allergies,
+          patientData.emergencyContact1,
+          patientData.emergencyContact2,
+          patientData.emergencyContact3,
+          patientData.imageUrl,
+          patientData.creatorName,
+          patientData.creatorId,
+          patientData.locationFound
+           )
+      })
+    );
+  }
+
+  getTriagePatient(id: string) {
+    return this.http
+    .get<PatientData>(`https://events-1ebb1.firebaseio.com/events/${id}.json`
+    )
+    .pipe(
+      map(patientData => {
+        return new Patient(
+          id,
+          patientData.forename,
+          patientData.surname,
+          new Date(patientData.dateOfBirth),
+          patientData.rfid,
           patientData.address,
           patientData.medicalHistory,
           patientData.drugHistory,
@@ -199,7 +305,7 @@ export class PatientService {
     forename: string,
     surname: string,
     dateOfBirth: Date,
-    pps: string,
+    rfid: string,
     address: string,
     medicalHistory: string,
     drugHistory: string,
@@ -208,33 +314,41 @@ export class PatientService {
     emergencyContact2: string,
     emergencyContact3: string,
     imageUrl: string,
-    locationFound: string
+    locationFound: PatientLocation
+
     ) {
       let generatedId: string;
-      const newPatient = new Patient(
-        Math.random().toString(),
-        forename,
-        surname,
-        dateOfBirth,
-        pps,
-        address,
-        medicalHistory,
-        drugHistory,
-        allergies,
-        emergencyContact1,
-        emergencyContact2,
-        emergencyContact3,
-        imageUrl,
-        // fetch creator from auth service
-        this.authService.creatorId,
-        this.authService.creatorName,
-        locationFound
-        );
-        return this.http
-        .post<{name : string}>('https://medi-comm-d1778.firebaseio.com/patients.json',{
-           ...newPatient,
-           id: null})
-          .pipe(
+      let newPatient: Patient;
+      return this.authService.userId.pipe(
+        take(1),
+        switchMap(userId => {
+        if (!userId) {
+          throw new Error('No user found!');
+        }
+        newPatient = new Patient(
+          Math.random().toString(),
+          forename,
+          surname,
+          dateOfBirth,
+          rfid,
+          address,
+          medicalHistory,
+          drugHistory,
+          allergies,
+          emergencyContact1,
+          emergencyContact2,
+          emergencyContact3,
+          imageUrl,
+          // fetch creator from auth service
+          userId,
+          this.authService.creatorName,
+          locationFound
+          );
+          return this.http
+          .post<{name : string}>('https://medi-comm-d1778.firebaseio.com/patients.json',{
+             ...newPatient,
+             id: null})
+          }),
             switchMap(resData => {
               generatedId = resData.name;
               return this.patients;
@@ -245,76 +359,66 @@ export class PatientService {
               this._patients.next(patients.concat(newPatient));
             })
         );
-      //   return this.patients.pipe(
-      //     take(1),
-      //     delay(1000),
-      //     tap(patients => {
-      //       this._patients.next(patients.concat(newPatient));
-      //   })
-      // );
     }
 
-    // updatePatient(
-    //   id: string,
-    //   forename: string,
-    //   surname: string,
-    //   address: string,
-    //   medicalHistory: string,
-    //   drugHistory: string,
-    //   allergies: string,
-    //   emergencyContact1: string,
-    //   emergencyContact2: string,
-    //   emergencyContact3: string,
-    //   locationFound: string
-    //   ){
-    //     let updatedPatients: Patient[];
-    //     return this.patients.pipe(
-    //       take(1),
-    //       switchMap(patients => {
-    //         if (!patients || patients.length <= 0) {
-    //           return this.fetchPatient();
-    //         } else {
-    //           return of(patients);
-    //         }
-    //     }),
-    //     switchMap(patients => {
-    //       if (!patients || patients.length <=0) {
-    //         return this.fetchPatient();
-    //       } else {
-    //         return of(patients);
-    //       }
-    //     }),
-    //     switchMap(patients => {
-    //       const updatedPatientIndex = patients.findIndex(pat => pat.id === id);
-    //       const updatedPatients = [...patients];
-    //       const oldPatient = updatedPatients[updatedPatientIndex];
-    //       updatedPatients[updatedPatientIndex] = new Patient(
-    //         oldPatient.id,
-    //         forename,
-    //         surname,
-    //         oldPatient.dateOfBirth,
-    //         oldPatient.pps,
-    //         address,
-    //         medicalHistory,
-    //         drugHistory,
-    //         allergies,
-    //         emergencyContact1,
-    //         emergencyContact2,
-    //         emergencyContact3,
-    //         oldPatient.imageUrl,
-    //         oldPatient.creatorId,
-    //         oldPatient.creatorName,
-    //         locationFound
-    //         );
-    //       return this.http.post(`https://medi-comm-d1778.firebaseio.com/patients/${id}.json`,
-    //       {...updatedPatients[updatedPatientIndex], id:null }
-    //       );
-    //     }),
-    //     tap(() => {
-    //       this._patients.next(updatedPatients);
-    //     })
-    //   );
-    // }
+    addTriagePatient(
+      forename: string,
+      surname: string,
+      dateOfBirth: Date,
+      rfid: string,
+      address: string,
+      medicalHistory: string,
+      drugHistory: string,
+      allergies: string,
+      emergencyContact1: string,
+      emergencyContact2: string,
+      emergencyContact3: string,
+      imageUrl: string,
+      locationFound: PatientLocation
+      ) {
+        let generatedId: string;
+        let newPatient: Patient;
+        return this.authService.userId.pipe(take(1), switchMap(userId => {
+          if (!userId) {
+            throw new Error('No user found');
+          }
+          newPatient = new Patient(
+            Math.random().toString(),
+            forename,
+            surname,
+            dateOfBirth,
+            rfid,
+            address,
+            medicalHistory,
+            drugHistory,
+            allergies,
+            emergencyContact1,
+            emergencyContact2,
+            emergencyContact3,
+            imageUrl,
+            // fetch creator from auth service
+            userId,
+            this.authService.creatorName,
+            locationFound
+            );
+            return this.http
+            .post<{name : string}>('https://events-1ebb1.firebaseio.com/events.json',{
+               ...newPatient,
+               id: null
+              }
+            )
+        }),
+              switchMap(resData => {
+                generatedId = resData.name;
+                return this.patients;
+              }),
+              take(1),
+              tap(patients => {
+                newPatient.id = generatedId;
+                this._patients.next(patients.concat(newPatient));
+              })
+          );
+      }
 
     updatePatient(
       id: string,
@@ -355,7 +459,7 @@ export class PatientService {
             forename,
             surname,
             oldPatient.dateOfBirth,
-            oldPatient.pps,
+            oldPatient.rfid,
             address,
             medicalHistory,
             drugHistory,
@@ -364,9 +468,9 @@ export class PatientService {
             emergencyContact2,
             emergencyContact3,
             oldPatient.imageUrl,
-            oldPatient.creatorId,
+            oldPatient.userId,
             oldPatient.creatorName,
-            locationFound
+            oldPatient.locationFound
             );
           return this.http.put(`https://medi-comm-d1778.firebaseio.com/patients/${id}.json`,
           {...updatedPatients[updatedPatientIndex], id:null }
@@ -390,7 +494,7 @@ export class PatientService {
       emergencyContact1: string,
       emergencyContact2: string,
       emergencyContact3: string,
-      locationFound: string
+      locationFound: PatientLocation
       ){
         let updatedPatients: Patient[];
         return this.patients.pipe(
@@ -418,7 +522,7 @@ export class PatientService {
             forename,
             surname,
             oldPatient.dateOfBirth,
-            oldPatient.pps,
+            oldPatient.rfid,
             address,
             medicalHistory,
             drugHistory,
@@ -427,11 +531,11 @@ export class PatientService {
             emergencyContact2,
             emergencyContact3,
             oldPatient.imageUrl,
-            oldPatient.creatorId,
+            oldPatient.userId,
             oldPatient.creatorName,
             locationFound
             );
-          return this.http.post(`https://events-1ebb1.firebaseio.com/events/${id}.json`,
+          return this.http.post(`https://events-1ebb1.firebaseio.com/events.json`,
           {...updatedPatients[updatedPatientIndex], id:null }
           );
         }),
@@ -454,18 +558,6 @@ export class PatientService {
           })
         );
     }
-
-    // search() {
-    //   let self = this;
-    //   self.results = self.afs.collection(`patients`, ref => ref
-    //     .orderBy("forename")
-    //     .startAt(self.searchValue.toLowerCase())
-    //     .endAt(self.searchValue.toLowerCase()+"\uf8ff")
-    //     .limit(2))
-    //     .valueChanges();
-    // }
-
-
 }
 
 

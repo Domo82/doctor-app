@@ -38,6 +38,8 @@ const firebaseEventsConfig = {
   projectId: "events-1ebb1"
 };
 
+//auth
+
 
 
 
