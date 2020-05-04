@@ -13,4 +13,16 @@ export class User {
         }
         return this._token;
     }
+
+    //calculate the remaining time until a user is auto logged out
+    get tokenDuration() {
+        // if we dont have a token, return zero
+        if(!this.token) {
+            return 0;
+        }
+        //return 5000; test to see if auto logout occurs after 5 seconds
+        // otherwise return new date/timestamp for duration in milliseconds
+        return this.tokenExpirationDate.getTime() - new Date().getTime();
+
+    }
 }

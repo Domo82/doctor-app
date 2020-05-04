@@ -25,13 +25,14 @@
       <ion-card-title>
       </ion-card-title>
       <ion-label>
-        <h2>RFID No: {{ patient?.rfid }}</h2>
-        <br>
-        <h2>ID No:</h2>
-        <p>{{ patient?.id }}</p>
-        <br>
         <h2>EIRCODE:</h2>
         <p>{{ patient.address }}</p>
+        <br>
+        <h2>D.O.B:</h2>
+        <p>{{ patient.dateOfBirth }}</p>
+        <br>
+        <h2>RFID No:</h2>
+        <h2> {{ patient?.rfidNumber }}</h2>
         <br>
         <h2>Medical History:</h2>
         <p>{{ patient?.medicalHistory }}</p>
@@ -39,17 +40,19 @@
         <h2>Drug History:</h2>
         <p>{{ patient?.drugHistory }}</p>
         <br>
+        <h2>Allergies:</h2>
+        <p>{{ patient?.allergies }}</p>
+        <br>
         <h2>Emergency Contacts:</h2>
         <h2>Emergency Contact 1: {{ patient?.emergencyContact1 }}</h2>
         <h2>Emergency Contact 2: {{ patient?.emergencyContact2 }}</h2>
-        <h2>Emergency Contact 3: {{ patient?.emergencyContact3 }}</h2>
       </ion-label>
     </ion-card-content>
   </ion-card>
 
     <ion-row>
-      <ion-col size-sm="6" offset-sm="3">
-        <h2 class="ion-text-center">Patient was found/or is being transported from</h2>
+      <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
+        <h2>{{patient.forename}} was found/or is being transported from</h2>
         <p>{{ patient?.locationFound.address }}</p>
         <ion-img class="location-image" [src]="patient.locationFound.staticMapImageUrl"></ion-img>
       </ion-col>

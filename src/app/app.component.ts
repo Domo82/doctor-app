@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Platform, NavController } from '@ionic/angular';
 import { AuthService } from './auth/auth.service';
 import { Plugins, Capacitor } from '@capacitor/core';
 import { Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Subscription } from 'rxjs';
 
 
 // import { Route } from '@angular/router';
@@ -13,7 +14,9 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
+    private authSub: Subscription;
+    private previousAuthState = false;
 
   constructor(
     private platform: Platform,
@@ -33,8 +36,23 @@ export class AppComponent {
     });
   }
 
+  ngOnInit() {
+    this.authSub = this.authSrvc.userIsAuthenticated.subscribe(isAuth => {
+      if (!isAuth && this.previousAuthState !== isAuth) {
+        this.router.navigateByUrl('/auth');
+      }
+      this.previousAuthState = isAuth;
+    });
+  }
+
   onLogout() {
     this.authSrvc.logout();
-    this.router.navigateByUrl('/auth');
   }
+
+  ngOnDestroy() {
+    if (this.authSub) {
+      this.authSub.unsubscribe();
+    }
+  }
+
 }

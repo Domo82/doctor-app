@@ -14,8 +14,6 @@
   <ion-grid *ngIf="!isLoading">
     <ion-card>
       <ion-card-content>
-        <h2>RFID No: {{ patient?.rfid }}</h2>
-        <br>
         <ion-avatar>
           <ion-img [src]="patient.imageUrl"></ion-img>
         </ion-avatar>
@@ -23,10 +21,14 @@
         <ion-card-title>
         </ion-card-title>
         <ion-label>
+          <h2>Name:</h2>
           <h2>{{ patient?.forename }} {{ patient?.surname }}</h2>
           <br>
-          <h2>ID No:</h2>
-          <p>{{ patient?.id }}</p>
+          <h2>RFID No:</h2>
+          <h2>{{ patient?.rfidNumber }}</h2>
+          <br>
+          <h2>D.O.B:</h2>
+          <h2>{{ patient?.dateOfBirth }}</h2>
           <br>
           <h2>EIRCODE:</h2>
           <p>{{ patient.address }}</p>
@@ -37,14 +39,16 @@
           <h2>Drug History:</h2>
           <p>{{ patient?.drugHistory }}</p>
           <br>
-          <h2>Emergency Contacts:</h2>
-          <h2>Emergency Contact 1: {{ patient?.emergencyContact1 }}</h2>
-          <h2>Emergency Contact 2: {{ patient?.emergencyContact2 }}</h2>
-          <h2>Emergency Contact 3: {{ patient?.emergencyContact3 }}</h2>
+          <h2>Allergies:</h2>
+          <p>{{ patient?.allergies }}</p>
+          <br>
+          <h2>Emergency Contact 1:</h2>
+          <h2>{{ patient.emergencyContact1 }}</h2>
+          <h2>Emergency Contact 2:</h2>
+          <h2>{{ patient.emergencyContact2 }}</h2>
         </ion-label>
       </ion-card-content>
     </ion-card>
-
     <div class="ion-text-center">
       <ion-button
         class="ion-margin"

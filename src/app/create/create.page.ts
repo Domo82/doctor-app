@@ -62,10 +62,6 @@ export class CreatePage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required, Validators.maxLength(250)]
       }),
-      rfid: new FormControl(null, {
-        updateOn: 'blur',
-        validators: [Validators.required, Validators.max(12)]
-      }),
       medicalHistory: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.maxLength(2500)]
@@ -86,9 +82,9 @@ export class CreatePage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.maxLength(10)]
       }),
-      emergencyContact3: new FormControl(null, {
+      rfidNumber: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.maxLength(10)]
+        validators: [Validators.maxLength(15)]
       }),
       imageUrl: new FormControl(null, {
         updateOn: 'blur',
@@ -146,9 +142,10 @@ export class CreatePage implements OnInit {
             this.form.value.allergies,
             this.form.value.emergencyContact1,
             this.form.value.emergencyContact2,
-            this.form.value.emergencyContact3,
+            this.form.value.rfidNumber,
             uploadRes.imageUrl,
-            this.form.value.location
+            this.form.value.location,
+            this.form.value.priority
           );
         })
       )

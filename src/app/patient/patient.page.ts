@@ -77,7 +77,7 @@ export class PatientPage implements OnInit, OnDestroy {
             updateOn: 'blur',
             validators: [Validators.maxLength(10)]
           }),
-          emergencyContact3: new FormControl(this.patient.emergencyContact3, {
+          rfidNumber: new FormControl(this.patient.rfidNumber, {
             updateOn: 'blur',
             validators: [Validators.maxLength(10)]
           }),
@@ -138,8 +138,10 @@ export class PatientPage implements OnInit, OnDestroy {
         this.form.value.allergies,
         this.form.value.emergencyContact1,
         this.form.value.emergencyContact2,
-        this.form.value.emergencyContact3,
-        this.form.value.locationFound
+        this.form.value.rfidNumber,
+        this.form.value.locationFound,
+        this.form.value.priority
+
       ).subscribe(() => {
         loadingEl.dismiss();
         this.form.reset();

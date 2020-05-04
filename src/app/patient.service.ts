@@ -21,7 +21,7 @@ interface PatientData{
   drugHistory: string;
   emergencyContact1: string;
   emergencyContact2: string;
-  emergencyContact3: string;
+  rfidNumber: string;
   forename: string;
   imageUrl: string;
   locationFound: PatientLocation,
@@ -129,7 +129,7 @@ export class PatientService implements AutoCompleteModule{
                   key,
                   resData[key].forename,
                   resData[key].surname,
-                  new Date (resData[key].dateOfBirth),
+                  resData[key].dateOfBirth,
                   resData[key].rfid,
                   resData[key].address,
                   resData[key].medicalHistory,
@@ -137,7 +137,7 @@ export class PatientService implements AutoCompleteModule{
                   resData[key].allergies,
                   resData[key].emergencyContact1,
                   resData[key].emergencyContact2,
-                  resData[key].emergencyContact3,
+                  resData[key].rfidNumber,
                   resData[key].imageUrl,
                   resData[key].creatorName,
                   resData[key].creatorId,
@@ -171,7 +171,7 @@ export class PatientService implements AutoCompleteModule{
             key,
             resData[key].forename,
             resData[key].surname,
-            new Date (resData[key].dateOfBirth),
+            resData[key].dateOfBirth,
             resData[key].rfid,
             resData[key].address,
             resData[key].medicalHistory,
@@ -179,7 +179,7 @@ export class PatientService implements AutoCompleteModule{
             resData[key].allergies,
             resData[key].emergencyContact1,
             resData[key].emergencyContact2,
-            resData[key].emergencyContact3,
+            resData[key].rfidNumber,
             resData[key].imageUrl,
             resData[key].creatorName,
             resData[key].creatorId,
@@ -212,7 +212,7 @@ export class PatientService implements AutoCompleteModule{
           key,
           resData[key].forename,
           resData[key].surname,
-          new Date (resData[key].dateOfBirth),
+          resData[key].dateOfBirth,
           resData[key].rfid,
           resData[key].address,
           resData[key].medicalHistory,
@@ -220,7 +220,7 @@ export class PatientService implements AutoCompleteModule{
           resData[key].allergies,
           resData[key].emergencyContact1,
           resData[key].emergencyContact2,
-          resData[key].emergencyContact3,
+          resData[key].rfidNumber,
           resData[key].imageUrl,
           resData[key].creatorName,
           resData[key].creatorId,
@@ -248,7 +248,7 @@ export class PatientService implements AutoCompleteModule{
           id,
           patientData.forename,
           patientData.surname,
-          new Date(patientData.dateOfBirth),
+          patientData.dateOfBirth,
           patientData.rfid,
           patientData.address,
           patientData.medicalHistory,
@@ -256,7 +256,7 @@ export class PatientService implements AutoCompleteModule{
           patientData.allergies,
           patientData.emergencyContact1,
           patientData.emergencyContact2,
-          patientData.emergencyContact3,
+          patientData.rfidNumber,
           patientData.imageUrl,
           patientData.creatorName,
           patientData.creatorId,
@@ -276,7 +276,7 @@ export class PatientService implements AutoCompleteModule{
           id,
           patientData.forename,
           patientData.surname,
-          new Date(patientData.dateOfBirth),
+          patientData.dateOfBirth,
           patientData.rfid,
           patientData.address,
           patientData.medicalHistory,
@@ -284,7 +284,7 @@ export class PatientService implements AutoCompleteModule{
           patientData.allergies,
           patientData.emergencyContact1,
           patientData.emergencyContact2,
-          patientData.emergencyContact3,
+          patientData.rfidNumber,
           patientData.imageUrl,
           patientData.creatorName,
           patientData.creatorId,
@@ -312,9 +312,10 @@ export class PatientService implements AutoCompleteModule{
     allergies: string,
     emergencyContact1: string,
     emergencyContact2: string,
-    emergencyContact3: string,
+    rfidNumber: string,
     imageUrl: string,
-    locationFound: PatientLocation
+    locationFound: PatientLocation,
+    priority
 
     ) {
       let generatedId: string;
@@ -329,7 +330,7 @@ export class PatientService implements AutoCompleteModule{
           Math.random().toString(),
           forename,
           surname,
-          dateOfBirth,
+          dateOfBirth.toDateString(),
           rfid,
           address,
           medicalHistory,
@@ -337,7 +338,7 @@ export class PatientService implements AutoCompleteModule{
           allergies,
           emergencyContact1,
           emergencyContact2,
-          emergencyContact3,
+          rfidNumber,
           imageUrl,
           // fetch creator from auth service
           userId,
@@ -372,9 +373,10 @@ export class PatientService implements AutoCompleteModule{
       allergies: string,
       emergencyContact1: string,
       emergencyContact2: string,
-      emergencyContact3: string,
+      rfidNumber: string,
       imageUrl: string,
-      locationFound: PatientLocation
+      locationFound: PatientLocation,
+      priority
       ) {
         let generatedId: string;
         let newPatient: Patient;
@@ -386,7 +388,7 @@ export class PatientService implements AutoCompleteModule{
             Math.random().toString(),
             forename,
             surname,
-            dateOfBirth,
+            dateOfBirth.toDateString(),
             rfid,
             address,
             medicalHistory,
@@ -394,7 +396,7 @@ export class PatientService implements AutoCompleteModule{
             allergies,
             emergencyContact1,
             emergencyContact2,
-            emergencyContact3,
+            rfidNumber,
             imageUrl,
             // fetch creator from auth service
             userId,
@@ -430,8 +432,9 @@ export class PatientService implements AutoCompleteModule{
       allergies: string,
       emergencyContact1: string,
       emergencyContact2: string,
-      emergencyContact3: string,
-      locationFound: string
+      rfidNumber: string,
+      locationFound: string,
+      priority
       ){
         let updatedPatients: Patient[];
         return this.patients.pipe(
@@ -466,7 +469,7 @@ export class PatientService implements AutoCompleteModule{
             allergies,
             emergencyContact1,
             emergencyContact2,
-            emergencyContact3,
+            rfidNumber,
             oldPatient.imageUrl,
             oldPatient.userId,
             oldPatient.creatorName,
@@ -493,8 +496,9 @@ export class PatientService implements AutoCompleteModule{
       allergies: string,
       emergencyContact1: string,
       emergencyContact2: string,
-      emergencyContact3: string,
-      locationFound: PatientLocation
+      rfidNumber: string,
+      locationFound: PatientLocation,
+      priority: number
       ){
         let updatedPatients: Patient[];
         return this.patients.pipe(
@@ -529,7 +533,7 @@ export class PatientService implements AutoCompleteModule{
             allergies,
             emergencyContact1,
             emergencyContact2,
-            emergencyContact3,
+            rfidNumber,
             oldPatient.imageUrl,
             oldPatient.userId,
             oldPatient.creatorName,
