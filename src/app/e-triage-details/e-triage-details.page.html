@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" class="background">
   <div *ngIf="isLoading">
     <ion-spinner color="light"></ion-spinner>
   </div>
@@ -25,6 +25,9 @@
       <ion-card-title>
       </ion-card-title>
       <ion-label>
+        <h2>Hospital Destination:</h2>
+        <p>{{ patient.hospital }} Hospital</p>
+        <br>
         <h2>EIRCODE:</h2>
         <p>{{ patient.address }}</p>
         <br>
@@ -39,6 +42,9 @@
         <br>
         <h2>Drug History:</h2>
         <p>{{ patient?.drugHistory }}</p>
+        <br>
+        <h2>Surgery History:</h2>
+        <p>{{ patient?.surgeryHistory }}</p>
         <br>
         <h2>Allergies:</h2>
         <p>{{ patient?.allergies }}</p>
@@ -63,7 +69,7 @@
         class="ion-margin"
         color="success"
         (click)="onComplete(patient.id)"
-        >Triage Complete
+        >e-Triage Complete
       </ion-button>
     </div>
   </ion-grid>

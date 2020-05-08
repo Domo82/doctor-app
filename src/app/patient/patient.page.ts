@@ -81,6 +81,14 @@ export class PatientPage implements OnInit, OnDestroy {
             updateOn: 'blur',
             validators: [Validators.maxLength(10)]
           }),
+          hospital: new FormControl(this.patient.hospital, {
+            updateOn: 'blur',
+            validators: [Validators.maxLength(20), Validators.required]
+          }),
+          surgeryHistory: new FormControl(this.patient.surgeryHistory, {
+            updateOn: 'blur',
+            validators: [Validators.maxLength(20), Validators.required]
+          }),
           locationFound: new FormControl(null, {validators: [Validators.required]})
         });
         this.isLoading = false;
@@ -123,7 +131,7 @@ export class PatientPage implements OnInit, OnDestroy {
     }
     this.loadingCtrl
     .create({
-      message: 'Sending Patient etails...'
+      message: 'Sending Patient Details...'
     })
     .then(loadingEl => {
       loadingEl.present();
@@ -140,7 +148,8 @@ export class PatientPage implements OnInit, OnDestroy {
         this.form.value.emergencyContact2,
         this.form.value.rfidNumber,
         this.form.value.locationFound,
-        this.form.value.priority
+        this.form.value.hospital,
+        this.form.value.surgeryHistory
 
       ).subscribe(() => {
         loadingEl.dismiss();
@@ -148,8 +157,8 @@ export class PatientPage implements OnInit, OnDestroy {
         this.router.navigate(['/list']);
         this.alertCtrl
         .create({
-          header: 'Patient data sent to E-Triage Control',
-          message: 'Patients data has been sent to the Medi-Comm e-triage control center.',
+          header: 'Patient data sent to the e-Triage service',
+          message: 'Patients data has been sent to the Medi-Comm e-triage service center.',
           buttons: [
             {
             text: 'Okay'
@@ -162,6 +171,7 @@ export class PatientPage implements OnInit, OnDestroy {
       .then(alertEl => {
         alertEl.present();
       });
+      console.log(this.patientSrvc)
       });
     });
   }

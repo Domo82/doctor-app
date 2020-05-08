@@ -32,7 +32,7 @@ export class SearchPage implements OnInit {
       forename : "Teresa",
       imageUrl : "/assets/images/newuser.png",
       medicalHistory : "Heart Condition,\nDiabetes\n",
-      rfid : 38453942,
+      rfid : 39384710,
       surname : "Dillon"
     },
      {
@@ -45,10 +45,10 @@ export class SearchPage implements OnInit {
       emergencyContact1 : 9,
       emergencyContact2 : 98,
       emergencyContact3 : 87,
-      forename : "Jane!!!",
+      forename : "Jane",
       imageUrl : "/assets/images/newuser.png",
       medicalHistory : "na",
-      rfid : 37792934,
+      rfid : 96968364,
       surname : "Doe"
     },
      {
@@ -61,14 +61,14 @@ export class SearchPage implements OnInit {
       emergencyContact1 : 123,
       emergencyContact2 : 321,
       emergencyContact3 : 456,
-      forename : "Peter",
+      forename : "John",
       imageUrl : "/assets/images/newuser.png",
       medicalHistory : "na",
-      rfid : 39384710,
-      surname : "Pan"
+      rfid : 74673742,
+      surname : "Doe"
     },
      {
-      address : "bray",
+      address : "Coolock",
       allergies : "na",
       creatorId : "Dr Dillon",
       creatorName : "12345",
@@ -77,44 +77,44 @@ export class SearchPage implements OnInit {
       emergencyContact1 : 12,
       emergencyContact2 : 12,
       emergencyContact3 : 12,
-      forename : "Graham",
-      imageUrl : "/assets/images/newuser.png",
+      forename : "Dominic",
+      imageUrl : "/assets/images/dominic.png",
       medicalHistory : "na",
-      rfid : 74673742,
-      surname : "Farrell"
-    },
-     {
-      address : "Springfield",
-      allergies : "na",
-      creatorId : "Dr Dillon",
-      creatorName : "12345",
-      dateOfBirth : "1984-03-01T17:19:34.735Z",
-      drugHistory : "na",
-      emergencyContact1 : 1,
-      emergencyContact2 : 2,
-      emergencyContact3 : 3,
-      forename : "Homer",
-      imageUrl : "/assets/images/newuser.png",
-      medicalHistory : "na",
-      rfid : 96968364,
-      surname : "Simpson"
-    },
-     {
-      "address" : "street",
-      "allergies" : "na",
-      "creatorId" : "Dr Dillon",
-      "creatorName" : "12345",
-      "dateOfBirth" : "1968-03-01T19:37:31.945Z",
-      "drugHistory" : "na",
-      "emergencyContact1" : 1,
-      "emergencyContact2" : 2,
-      "emergencyContact3" : 3,
-      "forename" : "bruce",
-      "imageUrl" : "/assets/images/newuser.png",
-      "medicalHistory" : "na",
-      "rfid" : 97003148,
-      "surname" : "almighty"
+      rfid : 38453942,
+      surname : "Dillon"
     }
+    //  {
+    //   address : "Springfield",
+    //   allergies : "na",
+    //   creatorId : "Dr Dillon",
+    //   creatorName : "12345",
+    //   dateOfBirth : "1984-03-01T17:19:34.735Z",
+    //   drugHistory : "na",
+    //   emergencyContact1 : 1,
+    //   emergencyContact2 : 2,
+    //   emergencyContact3 : 3,
+    //   forename : "Stephen",
+    //   imageUrl : "/assets/images/newuser.png",
+    //   medicalHistory : "na",
+    //   rfid : 96968364,
+    //   surname : "Wilson"
+    // },
+    //  {
+    //   "address" : "street",
+    //   "allergies" : "na",
+    //   "creatorId" : "Dr Dillon",
+    //   "creatorName" : "12345",
+    //   "dateOfBirth" : "1968-03-01T19:37:31.945Z",
+    //   "drugHistory" : "na",
+    //   "emergencyContact1" : 1,
+    //   "emergencyContact2" : 2,
+    //   "emergencyContact3" : 3,
+    //   "forename" : "Michael",
+    //   "imageUrl" : "/assets/images/newuser.png",
+    //   "medicalHistory" : "na",
+    //   "rfid" : 97003148,
+    //   "surname" : "O'Brien"
+    // }
   ]
 
   loadedPatients: Patient[];

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController, LoadingController, AlertController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
 import { FormGroup , FormControl, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -26,7 +26,8 @@ export class EditPage implements OnInit, OnDestroy {
     private navCtrl: NavController,
     private router: Router,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController) { }
+    private alertCtrl: AlertController,
+    private actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
@@ -71,7 +72,7 @@ export class EditPage implements OnInit, OnDestroy {
           }),
           emergencyContact1: new FormControl(this.patient.emergencyContact1, {
             updateOn: 'blur',
-            validators: [Validators.maxLength(11)]
+            validators: [Validators.required,Validators.maxLength(11)]
           }),
           emergencyContact2: new FormControl(this.patient.emergencyContact2, {
             updateOn: 'blur',
@@ -80,6 +81,10 @@ export class EditPage implements OnInit, OnDestroy {
           rfidNumber: new FormControl(this.patient.rfidNumber, {
             updateOn: 'blur',
             validators: [Validators.maxLength(15)]
+          }),
+          surgeryHistory: new FormControl(this.patient.surgeryHistory, {
+            updateOn: 'blur',
+            validators: [Validators.required,Validators.maxLength(15)]
           })
         });
         this.isLoading = false;
@@ -135,11 +140,22 @@ export class EditPage implements OnInit, OnDestroy {
         this.form.value.emergencyContact2,
         this.form.value.rfidNumber,
         this.form.value.locationFound,
-        this.form.value.priority
+        this.form.value.priority,
+        this.form.value.surgeryHistory
       ).subscribe(() => {
         loadingEl.dismiss();
         this.form.reset();
         this.router.navigate(['/list']);
+      });
+    });
+  }
+
+  onDelete(id: string) {
+    this.loadingCtrl.create({message: 'Deleting patient from the patient list'}).then(loadingEl => {
+      loadingEl.present();
+      this.patientSrvc.deletePatient(id).subscribe(() => {
+        loadingEl.dismiss(), 2000;
+        this.router.navigate(['/home']);
       });
     });
   }

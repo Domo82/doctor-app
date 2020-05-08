@@ -17,6 +17,8 @@ export class Patient {
         public imageUrl: string,
         public creatorName: string,
         public userId: string,
-        public locationFound: PatientLocation
+        public locationFound: PatientLocation,
+        public hospital: string,
+        public surgeryHistory: string
     ) {}
 }

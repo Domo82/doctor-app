@@ -76,7 +76,7 @@ export class CreatePage implements OnInit {
       }),
       emergencyContact1: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.maxLength(12)]
+        validators: [Validators.required,Validators.maxLength(12)]
       }),
       emergencyContact2: new FormControl(null, {
         updateOn: 'blur',
@@ -85,6 +85,10 @@ export class CreatePage implements OnInit {
       rfidNumber: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.maxLength(15)]
+      }),
+      surgeryHistory: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.required,Validators.maxLength(15)]
       }),
       imageUrl: new FormControl(null, {
         updateOn: 'blur',
@@ -145,7 +149,8 @@ export class CreatePage implements OnInit {
             this.form.value.rfidNumber,
             uploadRes.imageUrl,
             this.form.value.location,
-            this.form.value.priority
+            this.form.value.priority,
+            this.form.value.surgeryHistory
           );
         })
       )

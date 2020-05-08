@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding" class="background">
   <form [formGroup]="form">
     <ion-grid>
       <ion-row>
@@ -93,6 +93,17 @@
           <ion-textarea
           rows="3"
           formControlName="drugHistory"
+          ></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+          <ion-label position="floating">Surgery History</ion-label>
+          <ion-textarea
+          rows="3"
+          formControlName="surgeryHistory"
           ></ion-textarea>
           </ion-item>
         </ion-col>

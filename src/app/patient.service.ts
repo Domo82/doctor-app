@@ -28,17 +28,16 @@ interface PatientData{
   medicalHistory: string;
   rfid: string;
   surname: string;
+  hospital: string;
+  surgeryHistory: string;
 }
 
 export enum SearchType {
   all = '',
   surname = 'surname',
-  // rfid = 'rfid',
-   //id = 'id',
-  //name = 'name'
-  movie = 'movie',
-  series = 'series',
-  episode = 'episode'
+  rfid = 'rfid',
+  id = 'id',
+  forename = 'name'
 }
 
 
@@ -109,8 +108,8 @@ export class PatientService implements AutoCompleteModule{
       console.log(this.http.get('https://medi-comm-d1778.firebaseio.com/patients.json'));
     }
 
-    searchData(surname: string, type: SearchType): Observable<any> {
-      return this.http.get<Observable<any>>(`${this.url}?s=${encodeURI(surname)}&type=${type}&apikey=${this.apiKey}`).pipe(
+    searchData(rfidNumber: string, type: SearchType): Observable<any> {
+      return this.http.get<Observable<any>>(`${this.url}?s=${encodeURI(rfidNumber)}&type=${type}&apikey=${this.apiKey}`).pipe(
         map(results => {
           console.log('RAW: ', results);
           return results['Search'];
@@ -118,8 +117,8 @@ export class PatientService implements AutoCompleteModule{
       );
     }
 
-    getDetails(surname: string): Observable<any> {
-      return this.http.get(`${this.url}?i=${surname}&plot=full&apikey=${this.apiKey}`).pipe(
+    getDetails(forename: string): Observable<any> {
+      return this.http.get(`${this.url}?i=${forename}&plot=full&apikey=${this.apiKey}`).pipe(
         map(resData => {
           const patients = [];
           for (const key in resData) {
@@ -141,7 +140,9 @@ export class PatientService implements AutoCompleteModule{
                   resData[key].imageUrl,
                   resData[key].creatorName,
                   resData[key].creatorId,
-                  resData[key].locationFound
+                  resData[key].locationFound,
+                  resData[key].hospital,
+                  resData[key].surgeryHistory
                 )
               );
             }
@@ -183,7 +184,10 @@ export class PatientService implements AutoCompleteModule{
             resData[key].imageUrl,
             resData[key].creatorName,
             resData[key].creatorId,
-            resData[key].locationFound
+            resData[key].locationFound,
+            resData[key].hospital,
+            resData[key].surgeryHistory
+
             )
           );
         }
@@ -224,7 +228,9 @@ export class PatientService implements AutoCompleteModule{
           resData[key].imageUrl,
           resData[key].creatorName,
           resData[key].creatorId,
-          resData[key].locationFound
+          resData[key].locationFound,
+          resData[key].hospital,
+          resData[key].surgeryHistory
           )
         );
       }
@@ -260,7 +266,9 @@ export class PatientService implements AutoCompleteModule{
           patientData.imageUrl,
           patientData.creatorName,
           patientData.creatorId,
-          patientData.locationFound
+          patientData.locationFound,
+          patientData.hospital,
+          patientData.surgeryHistory
            )
       })
     );
@@ -288,7 +296,9 @@ export class PatientService implements AutoCompleteModule{
           patientData.imageUrl,
           patientData.creatorName,
           patientData.creatorId,
-          patientData.locationFound
+          patientData.locationFound,
+          patientData.hospital,
+          patientData.surgeryHistory
            )
       })
     );
@@ -297,8 +307,9 @@ export class PatientService implements AutoCompleteModule{
   uploadImage(image: File) {
     const uploadData = new FormData();
     uploadData.append('image', image);
-
-    return this.http.post<{imageUrl: string, imagePath: string}>('https://us-central1-medi-comm-d1778.cloudfunctions.net/storeImage', uploadData);
+    return this.http.post<{imageUrl: string, imagePath: string}>(
+      'https://us-central1-medi-comm-d1778.cloudfunctions.net/storeImage',
+      uploadData);
   }
 
   addPatient(
@@ -315,8 +326,8 @@ export class PatientService implements AutoCompleteModule{
     rfidNumber: string,
     imageUrl: string,
     locationFound: PatientLocation,
-    priority
-
+    hospital: string,
+    surgeryHistory: string
     ) {
       let generatedId: string;
       let newPatient: Patient;
@@ -343,7 +354,9 @@ export class PatientService implements AutoCompleteModule{
           // fetch creator from auth service
           userId,
           this.authService.creatorName,
-          locationFound
+          locationFound,
+          hospital,
+          surgeryHistory
           );
           return this.http
           .post<{name : string}>('https://medi-comm-d1778.firebaseio.com/patients.json',{
@@ -376,7 +389,8 @@ export class PatientService implements AutoCompleteModule{
       rfidNumber: string,
       imageUrl: string,
       locationFound: PatientLocation,
-      priority
+      hospital: string,
+      surgeryHistory: string
       ) {
         let generatedId: string;
         let newPatient: Patient;
@@ -401,7 +415,9 @@ export class PatientService implements AutoCompleteModule{
             // fetch creator from auth service
             userId,
             this.authService.creatorName,
-            locationFound
+            locationFound,
+            hospital,
+            surgeryHistory
             );
             return this.http
             .post<{name : string}>('https://events-1ebb1.firebaseio.com/events.json',{
@@ -434,7 +450,8 @@ export class PatientService implements AutoCompleteModule{
       emergencyContact2: string,
       rfidNumber: string,
       locationFound: string,
-      priority
+      hospital: string,
+      surgeryHistory: string
       ){
         let updatedPatients: Patient[];
         return this.patients.pipe(
@@ -473,7 +490,9 @@ export class PatientService implements AutoCompleteModule{
             oldPatient.imageUrl,
             oldPatient.userId,
             oldPatient.creatorName,
-            oldPatient.locationFound
+            oldPatient.locationFound,
+            hospital,
+            surgeryHistory
             );
           return this.http.put(`https://medi-comm-d1778.firebaseio.com/patients/${id}.json`,
           {...updatedPatients[updatedPatientIndex], id:null }
@@ -498,7 +517,8 @@ export class PatientService implements AutoCompleteModule{
       emergencyContact2: string,
       rfidNumber: string,
       locationFound: PatientLocation,
-      priority: number
+      hospital: string,
+      surgeryHistory: string
       ){
         let updatedPatients: Patient[];
         return this.patients.pipe(
@@ -537,7 +557,9 @@ export class PatientService implements AutoCompleteModule{
             oldPatient.imageUrl,
             oldPatient.userId,
             oldPatient.creatorName,
-            locationFound
+            locationFound,
+            hospital,
+            surgeryHistory
             );
           return this.http.post(`https://events-1ebb1.firebaseio.com/events.json`,
           {...updatedPatients[updatedPatientIndex], id:null }
@@ -553,6 +575,20 @@ export class PatientService implements AutoCompleteModule{
       return this.http
       .delete(
         `https://events-1ebb1.firebaseio.com/events/${id}.json`
+        ).pipe(
+          switchMap(() => {
+            return this.patients;
+          }),
+          take(1),tap(patients => {
+            this._patients.next(patients.filter(p => p.id !== id));
+          })
+        );
+    }
+
+    deletePatient(id: string) {
+      return this.http
+      .delete(
+        `https://medi-comm-d1778.firebaseio.com/patients/${id}.json`
         ).pipe(
           switchMap(() => {
             return this.patients;
