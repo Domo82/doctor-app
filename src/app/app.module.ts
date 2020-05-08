@@ -54,7 +54,7 @@ import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
     { provide:RouteReuseStrategy, useClass: IonicRouteStrategy },
     BarcodeScanner,
     Base64ToGallery,
-    OneSignal
+    //OneSignal
   ],
   bootstrap: [AppComponent]
 })
