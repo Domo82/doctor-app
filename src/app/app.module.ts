@@ -21,7 +21,6 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 
-// import { OneSignal } from '@ionic-native/OneSignal/ngx';
 
 
 
