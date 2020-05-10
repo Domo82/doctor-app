@@ -99,10 +99,6 @@ export class CreatePage implements OnInit {
   }
 
 
-  // onLocationPicked(location: PatientLocation) {
-  //   this.form.patchValue({location: location});
-  // }
-
   onImagePicked(imageData: string | File) {
     let imageFile;
     if (typeof imageData === 'string') {

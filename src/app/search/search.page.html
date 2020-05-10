@@ -10,15 +10,23 @@
 
 <ion-content class="ion-padding" class="background">
   <!-- Search Bar -->
-  <ion-searchbar placeholder="Scan RFID Device/Accessory" [(ngModel)]="term" animated="true"></ion-searchbar>
- 
-  <!-- List Items -->
-  <!-- <ion-list>
+  <!-- <ion-searchbar placeholder="Scan RFID Device/Accessory" [(ngModel)]="term" animated="true"></ion-searchbar> -->
+
+   <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="searchChanged($event)"></ion-searchbar>
+  <ion-item>
+    <ion-label>Select Searchtype</ion-label>
+    <ion-select [(ngModel)]="type" (ionChange)="searchChanged($event)">
+      <ion-select-option value="">All</ion-select-option>
+      <ion-select-option value="surname">Surname</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-list>
     <ion-item *ngFor="let item of filterData | filter:term">
       <ion-label>{{item.forename}} {{item.surname}}</ion-label>
       <p>RFID: {{item.rfid}}</p>
     </ion-item>
-  </ion-list> -->
+  </ion-list>
 
   <ion-grid>
     <ion-row>
@@ -39,25 +47,11 @@
   </ion-grid>
 </ion-content>
 
-
-
-
-
-
-<!-- <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="searchChanged($event)"></ion-searchbar>
-  <ion-item>
-    <ion-label>Select Searchtype</ion-label>
-    <ion-select [(ngModel)]="type" (ionChange)="searchChanged($event)">
-      <ion-select-option value="">All</ion-select-option>
-      <ion-select-option value="surname">Surname</ion-select-option>
-    </ion-select>
-  </ion-item>
-
-  <ion-list>
+  <!-- <ion-list>
     <ion-item *ngFor="let item of (results | async)">
       {{item.surname}}
       <br>
     </ion-item>
-  </ion-list> -->
+  </ion-list> --> -->
 
 

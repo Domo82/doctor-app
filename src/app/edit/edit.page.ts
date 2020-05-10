@@ -109,12 +109,6 @@ export class EditPage implements OnInit, OnDestroy {
     );
   });
 }
-  // ionViewWillEnter() {
-  //   this.isLoading = true;
-  //   this.patientSrvc.fetchPatient().subscribe(() => {
-  //     this.isLoading = false;
-  //   });
-  // }
 
 
   onUpdateDetails() {

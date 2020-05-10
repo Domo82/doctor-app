@@ -47,10 +47,7 @@ export enum SearchType {
 export class PatientService implements AutoCompleteModule{
 
   url = 'https://medi-comm-d1778.firebaseio.com/patients.json';
-  //url = 'http://www.omdbapi.com/';
   apiKey = 'AIzaSyBpqn2LpO8UJe8SSIJneQuPLikA_WilPpA';
-  //AIzaSyDncd1aUlmEf3CS6SxZPWuPNmEzBRGcwlw
-  //apiKey = 'e18ea211'
 
   private _patients = new BehaviorSubject<Patient[]>([]);
 
@@ -64,44 +61,6 @@ export class PatientService implements AutoCompleteModule{
     private authService: AuthService,
     private http: HttpClient) {
 
-      // this.filterPatient = [
-      //   {
-      //     firstName: "Dominic",
-      //     secondName: "Dillon",
-      //     RFID: "39384710",
-      //     EIRCODE: "D05 YA44",
-      //     drug: "NA",
-      //     Surgery: "NA",
-      //     allergy: "NA"
-      //   },
-      //   {
-      //     firstName: "Patrick",
-      //     secondName: "Bradley",
-      //     RFID: "38453942",
-      //     EIRCODE: "W23 V2P2",
-      //     drug: "NA",
-      //     Surgery: "Last Hair Cut",
-      //     allergy: "NA"
-      //   },
-      //   {
-      //     firstName: "Graham",
-      //     secondName: "Farrell",
-      //     RFID: "37792934",
-      //     EIRCODE: "B45 V2P2",
-      //     drug: "Lots",
-      //     Surgery: "Crazy steel bars in his toes",
-      //     allergy: "Tom Colgan"
-      //   },
-      //   {
-      //     firstName: "Graham",
-      //     secondName: "Farrell",
-      //     RFID: "37792934",
-      //     EIRCODE: "B23 T4Y9",
-      //     drug: "Lots",
-      //     Surgery: "Definitely needs it",
-      //     allergy: "Work"
-      //   }
-      // ];
     }
 
     getRemoteData() {
@@ -599,60 +558,3 @@ export class PatientService implements AutoCompleteModule{
         );
     }
 }
-
-
-//Dummy Data
-
-// [
-//   new Patient(
-//     '112233',
-//     'Dominic',
-//     'Dillon',
-//      new Date('05-12-1982'),
-//     'A1234',
-//     '123 fake street',
-//     'none',
-//     'none',
-//     'none',
-//     '0871234567',
-//     '0861234567',
-//     '0881234567',
-//     '/assets/images/baymax.png',
-//     'Dr Dillon',
-//     '12345'
-//     ),
-//   new Patient(
-//     '445566',
-//     'Karina',
-//     'Dillon',
-//     new Date('12-02-1985'),
-//     'B567 8',
-//     '123 fake street',
-//     'none',
-//     'none',
-//     'none',
-//     '0871234567',
-//     '0861234567',
-//     '0881234567',
-//     '/assets/images/woody.png',
-//     'Dr Dillon',
-//     '12345'
-//     ),
-//   new Patient(
-//     '778899',
-//     'Zoe',
-//     'Dillon',
-//     new Date('20-02-2019'),
-//     'C8901',
-//     '123 fake street',
-//     'none',
-//     'none',
-//     'none',
-//     '0871234567',
-//     '0861234567',
-//     '0881234567',
-//     '/assets/images/forky.png',
-//     'Dr Dillon',
-//     '12345'
-//     )
-// ]
